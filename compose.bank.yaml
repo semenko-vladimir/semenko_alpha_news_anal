@@ -1,0 +1,7 @@
+# Optional private local bank index; never copied into an image.
+services:
+  api:
+    environment:
+      ALPHA_MVP_BANK_PATH: /inputs/bank.sqlite3
+    volumes:
+      - ${MVP_BANK_FILE:?Set MVP_BANK_FILE to the local bank SQLite index}:/inputs/bank.sqlite3:ro

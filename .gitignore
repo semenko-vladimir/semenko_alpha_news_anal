@@ -1,0 +1,37 @@
+# Supplied materials: keep local until redistribution is reviewed.
+/*.csv
+/*.pdf
+/data/raw/
+/data/processed/
+
+# Secrets and local scratch.
+.env
+.env.*
+!.env.example
+# Keep local root text files out of version control.
+/*.txt
+.tmp/
+__pycache__/
+*.pyc
+node_modules/
+dist/
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# Local runtime and release artifacts.
+*.sqlite3
+*.sqlite3-*
+*.sqlite
+*.log
+*.zip
+*.tar
+*.tar.gz
+*.tsbuildinfo
+
+.ssh/
+*.pem
+*.key
+*.p12
+*.7z
+*.tgz

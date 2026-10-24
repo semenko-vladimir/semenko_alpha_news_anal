@@ -1,0 +1,447 @@
+{
+  "dataset_id": "QUALITY-010-internal-stress-v1",
+  "labels": [
+    {
+      "case_id": "new-A-1-trade-CFO",
+      "expected": {
+        "selection_order": [
+          "news:00459e0e39c1b03284a2570d84dbbcd0cd85497e9b65a1836e99b7a9eba44a12",
+          "news:5d2356723b9038c793bbd5223ad991fca809772503c8b192cd2bde7933e952e3"
+        ],
+        "selected_event_id": "news:00459e0e39c1b03284a2570d84dbbcd0cd85497e9b65a1836e99b7a9eba44a12",
+        "role_relevant_topics": [
+          "В оптовой торговле мебелью продавцы требуют авансовых перечислений до получения изделий."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-A-1-trade-COO",
+      "expected": {
+        "selection_order": [
+          "news:5d2356723b9038c793bbd5223ad991fca809772503c8b192cd2bde7933e952e3",
+          "news:00459e0e39c1b03284a2570d84dbbcd0cd85497e9b65a1836e99b7a9eba44a12"
+        ],
+        "selected_event_id": "news:5d2356723b9038c793bbd5223ad991fca809772503c8b192cd2bde7933e952e3",
+        "role_relevant_topics": [
+          "В оптовой торговле мебелью увеличиваются сроки комплектации и доставки заказов."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-A-1-transport_logistics-CFO",
+      "expected": {
+        "selection_order": [
+          "news:5d2356723b9038c793bbd5223ad991fca809772503c8b192cd2bde7933e952e3",
+          "news:00459e0e39c1b03284a2570d84dbbcd0cd85497e9b65a1836e99b7a9eba44a12"
+        ],
+        "selected_event_id": "news:5d2356723b9038c793bbd5223ad991fca809772503c8b192cd2bde7933e952e3",
+        "role_relevant_topics": [
+          "В автомобильных грузовых перевозках заказчики откладывают перечисление денежных средств за рейсы."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-A-1-transport_logistics-COO",
+      "expected": {
+        "selection_order": [
+          "news:00459e0e39c1b03284a2570d84dbbcd0cd85497e9b65a1836e99b7a9eba44a12",
+          "news:5d2356723b9038c793bbd5223ad991fca809772503c8b192cd2bde7933e952e3"
+        ],
+        "selected_event_id": "news:00459e0e39c1b03284a2570d84dbbcd0cd85497e9b65a1836e99b7a9eba44a12",
+        "role_relevant_topics": [
+          "В автомобильных грузовых перевозках меняются расписания и плотность загрузки терминалов."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-A-2-trade-CFO",
+      "expected": {
+        "selection_order": [
+          "news:f45d03f38af1663b80e66e2ed5a4bb1fb57f1d7a2530e084328d85f2efe63f08",
+          "news:f30eefd14d4dbc97698b470fe4481271c7cd1531f5a22bacf7603b3fd4418ef3"
+        ],
+        "selected_event_id": "news:f45d03f38af1663b80e66e2ed5a4bb1fb57f1d7a2530e084328d85f2efe63f08",
+        "role_relevant_topics": [
+          "В оптовой торговле мебелью продавцы требуют авансовых перечислений до получения изделий."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-A-2-trade-COO",
+      "expected": {
+        "selection_order": [
+          "news:f30eefd14d4dbc97698b470fe4481271c7cd1531f5a22bacf7603b3fd4418ef3",
+          "news:f45d03f38af1663b80e66e2ed5a4bb1fb57f1d7a2530e084328d85f2efe63f08"
+        ],
+        "selected_event_id": "news:f30eefd14d4dbc97698b470fe4481271c7cd1531f5a22bacf7603b3fd4418ef3",
+        "role_relevant_topics": [
+          "В оптовой торговле мебелью увеличиваются сроки комплектации и доставки заказов."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-A-2-transport_logistics-CFO",
+      "expected": {
+        "selection_order": [
+          "news:f30eefd14d4dbc97698b470fe4481271c7cd1531f5a22bacf7603b3fd4418ef3",
+          "news:f45d03f38af1663b80e66e2ed5a4bb1fb57f1d7a2530e084328d85f2efe63f08"
+        ],
+        "selected_event_id": "news:f30eefd14d4dbc97698b470fe4481271c7cd1531f5a22bacf7603b3fd4418ef3",
+        "role_relevant_topics": [
+          "В автомобильных грузовых перевозках заказчики откладывают перечисление денежных средств за рейсы."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-A-2-transport_logistics-COO",
+      "expected": {
+        "selection_order": [
+          "news:f45d03f38af1663b80e66e2ed5a4bb1fb57f1d7a2530e084328d85f2efe63f08",
+          "news:f30eefd14d4dbc97698b470fe4481271c7cd1531f5a22bacf7603b3fd4418ef3"
+        ],
+        "selected_event_id": "news:f45d03f38af1663b80e66e2ed5a4bb1fb57f1d7a2530e084328d85f2efe63f08",
+        "role_relevant_topics": [
+          "В автомобильных грузовых перевозках меняются расписания и плотность загрузки терминалов."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-B-1-trade-CFO",
+      "expected": {
+        "selection_order": [
+          "news:c39b3cc1d1768467f50afcb5dd0d3bfa781298ab2617f5aaf93cb5b82ce3aa79",
+          "news:765b1148a616ae65331761193e6c482de6f40eb671140ed4e0b4fac443157e9f"
+        ],
+        "selected_event_id": "news:c39b3cc1d1768467f50afcb5dd0d3bfa781298ab2617f5aaf93cb5b82ce3aa79",
+        "role_relevant_topics": [
+          "В оптовой торговле строительными материалами переходят на предоплату с ростом потребности в оборотном капитале."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-B-1-trade-COO",
+      "expected": {
+        "selection_order": [
+          "news:765b1148a616ae65331761193e6c482de6f40eb671140ed4e0b4fac443157e9f",
+          "news:c39b3cc1d1768467f50afcb5dd0d3bfa781298ab2617f5aaf93cb5b82ce3aa79"
+        ],
+        "selected_event_id": "news:765b1148a616ae65331761193e6c482de6f40eb671140ed4e0b4fac443157e9f",
+        "role_relevant_topics": [
+          "В оптовой торговле строительными материалами меняются доступность складских партий и упаковка заказов."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-B-1-transport_logistics-CFO",
+      "expected": {
+        "selection_order": [
+          "news:765b1148a616ae65331761193e6c482de6f40eb671140ed4e0b4fac443157e9f",
+          "news:c39b3cc1d1768467f50afcb5dd0d3bfa781298ab2617f5aaf93cb5b82ce3aa79"
+        ],
+        "selected_event_id": "news:765b1148a616ae65331761193e6c482de6f40eb671140ed4e0b4fac443157e9f",
+        "role_relevant_topics": [
+          "В складировании и хранении увеличиваются отсрочки оплаты услуг, затрагивая ликвидность."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-B-1-transport_logistics-COO",
+      "expected": {
+        "selection_order": [
+          "news:c39b3cc1d1768467f50afcb5dd0d3bfa781298ab2617f5aaf93cb5b82ce3aa79",
+          "news:765b1148a616ae65331761193e6c482de6f40eb671140ed4e0b4fac443157e9f"
+        ],
+        "selected_event_id": "news:c39b3cc1d1768467f50afcb5dd0d3bfa781298ab2617f5aaf93cb5b82ce3aa79",
+        "role_relevant_topics": [
+          "В складировании и хранении вводятся новые окна обработки грузов и очереди на приёмке."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-B-2-trade-CFO",
+      "expected": {
+        "selection_order": [
+          "news:d2041c7fe6afe72fd7fd260474bd0fa4e94d27a040c4cb82210c3cd9f6e9c48e",
+          "news:6d065df01f42aefc0d98bc8b8434b1a579d6796ddbef5b52055a6aca4c732296"
+        ],
+        "selected_event_id": "news:d2041c7fe6afe72fd7fd260474bd0fa4e94d27a040c4cb82210c3cd9f6e9c48e",
+        "role_relevant_topics": [
+          "В оптовой торговле строительными материалами переходят на предоплату с ростом потребности в оборотном капитале."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-B-2-trade-COO",
+      "expected": {
+        "selection_order": [
+          "news:6d065df01f42aefc0d98bc8b8434b1a579d6796ddbef5b52055a6aca4c732296",
+          "news:d2041c7fe6afe72fd7fd260474bd0fa4e94d27a040c4cb82210c3cd9f6e9c48e"
+        ],
+        "selected_event_id": "news:6d065df01f42aefc0d98bc8b8434b1a579d6796ddbef5b52055a6aca4c732296",
+        "role_relevant_topics": [
+          "В оптовой торговле строительными материалами меняются доступность складских партий и упаковка заказов."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-B-2-transport_logistics-CFO",
+      "expected": {
+        "selection_order": [
+          "news:6d065df01f42aefc0d98bc8b8434b1a579d6796ddbef5b52055a6aca4c732296",
+          "news:d2041c7fe6afe72fd7fd260474bd0fa4e94d27a040c4cb82210c3cd9f6e9c48e"
+        ],
+        "selected_event_id": "news:6d065df01f42aefc0d98bc8b8434b1a579d6796ddbef5b52055a6aca4c732296",
+        "role_relevant_topics": [
+          "В складировании и хранении увеличиваются отсрочки оплаты услуг, затрагивая ликвидность."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-B-2-transport_logistics-COO",
+      "expected": {
+        "selection_order": [
+          "news:d2041c7fe6afe72fd7fd260474bd0fa4e94d27a040c4cb82210c3cd9f6e9c48e",
+          "news:6d065df01f42aefc0d98bc8b8434b1a579d6796ddbef5b52055a6aca4c732296"
+        ],
+        "selected_event_id": "news:d2041c7fe6afe72fd7fd260474bd0fa4e94d27a040c4cb82210c3cd9f6e9c48e",
+        "role_relevant_topics": [
+          "В складировании и хранении вводятся новые окна обработки грузов и очереди на приёмке."
+        ],
+        "bank_position": "not_checked",
+        "exposure": "unknown"
+      },
+      "rationale": "Pre-output editorial preference by native main activity and role. Financial vs operational clause; no exposure inferred."
+    },
+    {
+      "case_id": "new-prov_01",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "observed_fact has no resolvable evidence reference"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "new-prov_02",
+      "expected": {
+        "validated_candidate": true,
+        "required_exposure_status": "unknown",
+        "date_semantics_scored": false
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "new-prov_03",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "evidence reference does not resolve"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "new-prov_04",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "confirmed exposure has no trusted relationship flag"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "new-prov_05",
+      "expected": {
+        "validated_candidate": true,
+        "required_exposure_status": "unknown",
+        "scope": "fixed safe candidate structure only; source instruction handling is not scored"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "new-prov_06",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "bank position has no ISO document date"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "new-prov_07",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "conflicting kind metadata for one source ID must be rejected or reconciled upstream"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "new-prov_08",
+      "expected": {
+        "validated_candidate": true,
+        "required_exposure_status": "confirmed",
+        "required_evidence_ref": "e8",
+        "scope": "structural trusted-flag boundary only; flag truth and scope are not scored"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    }
+  ],
+  "contrast_groups": {
+    "role": [
+      {
+        "group_id": "A-1-trade",
+        "case_ids": [
+          "new-A-1-trade-CFO",
+          "new-A-1-trade-COO"
+        ]
+      },
+      {
+        "group_id": "A-1-transport_logistics",
+        "case_ids": [
+          "new-A-1-transport_logistics-CFO",
+          "new-A-1-transport_logistics-COO"
+        ]
+      },
+      {
+        "group_id": "A-2-trade",
+        "case_ids": [
+          "new-A-2-trade-CFO",
+          "new-A-2-trade-COO"
+        ]
+      },
+      {
+        "group_id": "A-2-transport_logistics",
+        "case_ids": [
+          "new-A-2-transport_logistics-CFO",
+          "new-A-2-transport_logistics-COO"
+        ]
+      },
+      {
+        "group_id": "B-1-trade",
+        "case_ids": [
+          "new-B-1-trade-CFO",
+          "new-B-1-trade-COO"
+        ]
+      },
+      {
+        "group_id": "B-1-transport_logistics",
+        "case_ids": [
+          "new-B-1-transport_logistics-CFO",
+          "new-B-1-transport_logistics-COO"
+        ]
+      },
+      {
+        "group_id": "B-2-trade",
+        "case_ids": [
+          "new-B-2-trade-CFO",
+          "new-B-2-trade-COO"
+        ]
+      },
+      {
+        "group_id": "B-2-transport_logistics",
+        "case_ids": [
+          "new-B-2-transport_logistics-CFO",
+          "new-B-2-transport_logistics-COO"
+        ]
+      }
+    ],
+    "profile": [
+      {
+        "group_id": "A-1-CFO",
+        "case_ids": [
+          "new-A-1-trade-CFO",
+          "new-A-1-transport_logistics-CFO"
+        ]
+      },
+      {
+        "group_id": "A-1-COO",
+        "case_ids": [
+          "new-A-1-trade-COO",
+          "new-A-1-transport_logistics-COO"
+        ]
+      },
+      {
+        "group_id": "A-2-CFO",
+        "case_ids": [
+          "new-A-2-trade-CFO",
+          "new-A-2-transport_logistics-CFO"
+        ]
+      },
+      {
+        "group_id": "A-2-COO",
+        "case_ids": [
+          "new-A-2-trade-COO",
+          "new-A-2-transport_logistics-COO"
+        ]
+      },
+      {
+        "group_id": "B-1-CFO",
+        "case_ids": [
+          "new-B-1-trade-CFO",
+          "new-B-1-transport_logistics-CFO"
+        ]
+      },
+      {
+        "group_id": "B-1-COO",
+        "case_ids": [
+          "new-B-1-trade-COO",
+          "new-B-1-transport_logistics-COO"
+        ]
+      },
+      {
+        "group_id": "B-2-CFO",
+        "case_ids": [
+          "new-B-2-trade-CFO",
+          "new-B-2-transport_logistics-CFO"
+        ]
+      },
+      {
+        "group_id": "B-2-COO",
+        "case_ids": [
+          "new-B-2-trade-COO",
+          "new-B-2-transport_logistics-COO"
+        ]
+      }
+    ]
+  }
+}

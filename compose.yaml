@@ -1,0 +1,61 @@
+services:
+  api:
+    build:
+      context: .
+      target: api
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m
+    expose:
+      - "8000"
+    environment:
+      ALPHA_ANALYSIS_ENGINE: ${ALPHA_ANALYSIS_ENGINE:-mvp_offline}
+      ALPHA_DEMO_MODE: "0"
+      ALPHA_MVP_LOCAL_ACCESS: ${ALPHA_MVP_LOCAL_ACCESS:-0}
+      ALPHA_MVP_ALLOW_LIVE: "0"
+      ALPHA_MVP_ALLOW_CLIENT_DATA: "0"
+      ALPHA_DB_PATH: /var/lib/alpha-mvp/runtime.sqlite3
+      ALPHA_MVP_COMPANIES_PATH: /inputs/companies.csv
+      ALPHA_MVP_NEWS_INPUT: /inputs/news.sqlite3
+      ALPHA_MVP_NEWS_PATH: /var/lib/alpha-news/news.sqlite3
+      ALPHA_MVP_PAYMENTS_PATH: /inputs/payments.csv
+      ALPHA_MVP_LINKS_PATH: /inputs/links.csv
+      ALPHA_MVP_BANK_PATH: ""
+    volumes:
+      - ${MVP_COMPANIES_FILE:?Set MVP_COMPANIES_FILE to the local profiles CSV}:/inputs/companies.csv:ro
+      - ${MVP_NEWS_DB_FILE:?Set MVP_NEWS_DB_FILE to the local news SQLite database}:/inputs/news.sqlite3:ro
+      - ${MVP_PAYMENTS_FILE:?Set MVP_PAYMENTS_FILE to the local payments CSV}:/inputs/payments.csv:ro
+      - ${MVP_LINKS_FILE:?Set MVP_LINKS_FILE to the local links CSV}:/inputs/links.csv:ro
+      - mvp_runtime:/var/lib/alpha-mvp
+      - mvp_news_runtime:/var/lib/alpha-news
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      target: web
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - 127.0.0.1:${MVP_WEB_PORT:-8080}:8080
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  mvp_runtime:
+  mvp_news_runtime:

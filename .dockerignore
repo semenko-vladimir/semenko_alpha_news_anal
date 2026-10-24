@@ -1,0 +1,54 @@
+# Never send repository history, local configuration, credentials, or scratch to Docker.
+.git
+.tmp
+**/.tmp/**
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+.ssh
+**/.ssh/**
+**/id_*
+**/*.pem
+**/*.key
+**/*.p12
+**/*credential*
+**/*secret*
+
+# Supplied or derived company/bank materials are runtime-only read-only mounts.
+/data/
+**/*.csv
+**/*.pdf
+**/*.ocr
+**/*ocr*/
+**/*processed*/
+/data/raw/
+/data/processed/
+/data/raw/**
+/data/processed/**
+
+# Local databases and SQLite sidecar files must stay outside the image.
+**/*.[sS][qQ][lL][iI][tT][eE]*
+**/*.[dD][bB]
+**/*.[dD][bB]-*
+**/*.[dD][bB]3
+**/*.[dD][bB]3-*
+
+# Local build products and package caches are not part of the context.
+**/node_modules
+**/dist
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+frontend/tsconfig.tsbuildinfo
+
+# Tests and documentation are not needed to build the two runtime images.
+/tests
+/docs
+/examples
+# Root notes and local hidden files stay outside the image context.
+/.*
+/**/.*
+/*.md
+/*.txt
