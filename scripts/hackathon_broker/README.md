@@ -1,6 +1,6 @@
 # SSH broker модели
 
-Broker на стандартной библиотеке Python принимает JSON `task_id`, `model`, `prompt` через stdin и возвращает безопасный JSON-результат. Код фиксирует шесть разрешённых моделей и URL `https://api.alfahack-gateway26.ru/v1`. Исторический primary `https://changellenge.up.railway.app/v1` не служит автоматическим fallback. Вход не меняет headers, URL, tools, пути или команды. Prompt ограничен 12000 символами, output 384 токенами. Configure и health не вызывают модель.
+Broker на стандартной библиотеке Python принимает JSON `task_id`, `model`, `prompt` через stdin и возвращает безопасный JSON-результат. Код фиксирует шесть разрешённых моделей и URL `https://api.alfahack-gateway26.ru/v1`. Исторический primary `https://changellenge.up.railway.app/v1` не служит автоматическим fallback. Вход не меняет headers, URL, tools, пути или команды. Prompt ограничен 12000 символами, output 512 токенами. Configure и health не вызывают модель.
 
 ## Настройка оператора
 
@@ -24,7 +24,7 @@ Broker читает ключ только для HTTPS Authorization. Redirect �
 
 Общий бюджет организаторов 500 рублей в сутки на команду отличается от локального лимита попыток. Usage включает только известные неотрицательные integer counters. Broker не возвращает upstream error body или traceback. На budget/auth/unknown outcome остановите операцию. Новая задача не служит обходом неопределённого исхода или лимита.
 
-Для DeepSeek код передаёт `reasoning_effort=none` в прежнем пределе 384 токенов; остальные модели сохраняют свои параметры. [Документация провайдера](https://api-docs.deepseek.com/api/create-chat-completion/) описывает параметр, поддержку gateway проверяют отдельно. Пустой content завершает запрос ошибкой с сохранённым безопасным usage; он не разрешает retry. Изменение политики не повторяет исторические cached jobs.
+Для DeepSeek код передаёт `reasoning_effort=none` с пределом 512 output токенов; остальные модели сохраняют свои параметры. [Документация провайдера](https://api-docs.deepseek.com/api/create-chat-completion/) описывает параметр, поддержку gateway проверяют отдельно. Пустой content завершает запрос ошибкой с сохранённым безопасным usage; он не разрешает retry. Изменение политики не повторяет исторические cached jobs.
 
 ## Offline-проверки
 

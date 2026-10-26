@@ -5,6 +5,11 @@ const { formatSourceDate, safeSourceHref, sourceDateLabels } = require('../../.t
 const run = (status, id = 'r1') => ({ run_id: id, status });
 const deferred = () => { let resolve, reject; const promise = new Promise((a, b) => { resolve = a; reject = b; }); return { promise, resolve, reject }; };
 const immediate = async () => {};
+
+test('local inference success is distinct from fake and organizer-approved broker modes',()=>{
+ const message=runSuccessMessage('local_ollama');
+ assert.match(message,/локальн/i);assert.doesNotMatch(message,/синтетическ|тестов|разрешённой живой/);
+});
 test('pending context stays unavailable after switch and return; other pair works', async () => {
  const attempts = new Map(), gate = deferred(); let posts = 0;
  const api = { run: async company => { posts++; return company === 'A' ? gate.promise : run('succeeded'); } };

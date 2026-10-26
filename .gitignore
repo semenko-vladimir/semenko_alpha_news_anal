@@ -35,3 +35,15 @@ dist/
 *.p12
 *.7z
 *.tgz
+
+# Reviewed public product inputs and runbook; private data/docs stay excluded.
+!/data/
+/data/*
+!/data/catalog/
+/data/catalog/*
+!/data/catalog/companies.json
+!/data/catalog/news_sources.json
+!/docs/final-product.md
+!/docs/judging.md
+!/docs/quality-monitoring.md
+!/docs/local-llm.md

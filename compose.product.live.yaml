@@ -1,0 +1,9 @@
+services:
+  api:
+    environment:
+      ALPHA_PRODUCT_LIVE: "1"
+      ALPHA_BROKER_SOCKET_PATH: /broker/broker.sock
+    group_add:
+      - ${PRODUCT_BROKER_GID:?Set host broker socket group id}
+    volumes:
+      - ${PRODUCT_BROKER_RUN_DIR:?Set private broker socket directory}:/broker:ro

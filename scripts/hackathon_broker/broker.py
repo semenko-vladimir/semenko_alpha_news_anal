@@ -25,7 +25,7 @@ MODELS = {
 }
 MAX_PROMPT = 12000
 MAX_RESPONSE = 2_000_000
-MAX_TOKENS = 384
+MAX_TOKENS = 512
 MAX_DAILY = 4
 HOME = Path.home()
 CONFIG = HOME / ".config/alpha-hack-broker"

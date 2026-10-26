@@ -1,10 +1,14 @@
 # Настройка
 
+Актуальный запуск с 11 публичными профилями, реальными новостями, опциональными четырьмя профилями кейса и закрытым живым брокером описан в [инструкции финальной сборки](final-product.md). Ниже сохранена настройка прежнего синтетического сценария и прямого API. Разные Compose-файлы не следует смешивать.
+
 ## Синтетический пример
 
-Следуйте [первому запуску](../README.md). Python 3.14.3 соответствует контейнерному runtime. Генератор использует стандартную библиотеку и локальный модуль новостей. SQLite должен поддерживать FTS5. Docker собирает API, React и Nginx; API получает входы через read-only mounts и хранит изменяемое состояние в именованных volumes. LIVE выключен в Compose.
+Выполните команды раздела [«Синтетический инженерный пример»](../README.md#синтетический-инженерный-пример). Python 3.14.3 соответствует контейнерному runtime. Генератор использует стандартную библиотеку и локальный модуль новостей. SQLite должен поддерживать FTS5. Docker собирает API, React и Nginx; API получает входы через read-only mounts и хранит изменяемое состояние в именованных volumes. LIVE выключен в Compose.
 
 `compose.env` содержит пути и настройки доступа к локальному примеру, без ключей. Генератор создаёт четыре вымышленных профиля, новости и пустые таблицы платежей и связей. Если папка существует, выберите новый `--output` и используйте её `compose.env` в последующих командах. Выберите свободный `--port`.
+
+В сгенерированном env-файле заданы `MVP_COMPANIES_FILE`, `MVP_PAYMENTS_FILE`, `MVP_LINKS_FILE`, `MVP_NEWS_DB_FILE`, `ALPHA_ANALYSIS_ENGINE=mvp_offline`, `ALPHA_MVP_LOCAL_ACCESS=1` и `MVP_WEB_PORT`. Compose фиксирует `ALPHA_DEMO_MODE=0`, `ALPHA_MVP_ALLOW_LIVE=0`, `ALPHA_MVP_ALLOW_CLIENT_DATA=0`, пути контейнеров `ALPHA_DB_PATH`, `ALPHA_MVP_COMPANIES_PATH`, `ALPHA_MVP_NEWS_INPUT`, `ALPHA_MVP_NEWS_PATH`, `ALPHA_MVP_PAYMENTS_PATH`, `ALPHA_MVP_LINKS_PATH`, `ALPHA_MVP_BANK_PATH` и порт публикации. Последние пути и запреты задаются самим `compose.yaml`, вводить их в env-файл не требуется. Quickstart не задаёт `MVP_BANK_FILE` и не монтирует банковский индекс.
 
 ## Запуск без Docker
 
@@ -39,3 +43,7 @@ CSV использует UTF-8 с допустимым BOM и разделите
 Обычный запуск использует fake и не требует SSH. Оператор отдельно развёртывает [broker](../scripts/hackathon_broker/README.md). Python transport читает только `ALPHA_BROKER_HOST` и `ALPHA_BROKER_SCRIPT`: нейтральные defaults `model-broker` и `/opt/alpha-broker/broker.py`. Задайте SSH host из собственной конфигурации и абсолютный путь установки. Host допускает буквы, цифры, точку, дефис и подчёркивание; путь допускает эти символы и `/`, без пробелов и `..`. Клиент запрещает shell-метасимволы; prompt передаёт через stdin при `shell=False`.
 
 В PowerShell wrapper передайте те же значения параметрами `-BrokerHost` и `-BrokerScript`. Эти параметры не включают LIVE. Ключ пользователь вводит скрытым интерактивным configure на broker host; ключ не должен попадать в env приложения, команды или логи. Broker сохраняет фиксированный список моделей, квоту, endpoint и запрет retry. Оператор отдельно разрешает live и передачу клиентского контекста и назначает устойчивый task ID. На auth/budget/unknown outcome остановите зависимую операцию. Повтор с новым ID не решает неопределённый исход.
+
+Для обычного Docker quickstart SSH-переменных нет. Полный операторский перечень env приложения: `ALPHA_ANALYSIS_ENGINE`, `ALPHA_DEMO_MODE`, `ALPHA_MVP_LOCAL_ACCESS`, `ALPHA_MVP_ALLOW_LIVE`, `ALPHA_MVP_ALLOW_CLIENT_DATA`, `ALPHA_DB_PATH`, `ALPHA_MVP_COMPANIES_PATH`, `ALPHA_MVP_NEWS_INPUT`, `ALPHA_MVP_NEWS_PATH`, `ALPHA_MVP_PAYMENTS_PATH`, `ALPHA_MVP_LINKS_PATH`, `ALPHA_MVP_BANK_PATH`, `ALPHA_MVP_TASK_ID`, `ALPHA_BROKER_HOST`, `ALPHA_BROKER_SCRIPT`. Для прямого API оператор задаёт нужные пути и доступ. Compose сопоставляет перечисленные значения и отключает live/client-data. `ALPHA_MVP_TASK_ID` нужен только для назначенной live-задачи. `MVP_COMPANIES_FILE`, `MVP_PAYMENTS_FILE`, `MVP_LINKS_FILE`, `MVP_NEWS_DB_FILE`, необязательный `MVP_BANK_FILE` и `MVP_WEB_PORT` задают подстановки Compose; приложение не читает их как свои переменные окружения. Не помещайте credentials в эти файлы.
+
+Broker запрашивает до 512 output токенов на завершение генерации; prompt остаётся ограничен 12000 символами, дневной лимит — четырьмя task ID. Увеличение output cap не подтверждает качество ответа и не меняет квоту, маршруты или правила остановки.

@@ -17,6 +17,10 @@ class MVPConfig:
     allow_live: bool = False
     allow_client_data: bool = False
     task_id: str | None = None
+    public_catalog_path: str | Path | None = None
+    operation_jobs: bool = False
+    # Explicit server-only experimental client; never selected by HTTP input.
+    local_model_client: Any = None
     # Test-only transport injection; HTTP cannot select it or any paths/policy.
     transport: Any = None
 
@@ -31,4 +35,6 @@ class MVPConfig:
                    local_access=os.getenv("ALPHA_MVP_LOCAL_ACCESS") == "1",
                    allow_live=os.getenv("ALPHA_MVP_ALLOW_LIVE") == "1",
                    allow_client_data=os.getenv("ALPHA_MVP_ALLOW_CLIENT_DATA") == "1",
-                   task_id=os.getenv("ALPHA_MVP_TASK_ID"))
+                   task_id=os.getenv("ALPHA_MVP_TASK_ID"),
+                   public_catalog_path=os.getenv("ALPHA_PUBLIC_CATALOG_PATH"),
+                   operation_jobs=os.getenv("ALPHA_MVP_OPERATION_JOBS") == "1")

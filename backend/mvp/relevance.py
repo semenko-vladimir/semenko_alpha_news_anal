@@ -7,6 +7,17 @@ import re
 SECTOR_TERMS = {
     'TRADE': ('торгов', 'оптов', 'рознич', 'ритейл'),
     'TRANSPORT': ('транспорт', 'логист', 'перевоз', 'железнодор', 'складирован'),
+    'ENERGY': ('нефт', 'углеводород', 'газодобы', 'нефтепродукт'),
+    'MATERIALS': ('металлург', 'металл', 'руд', 'никел', 'медн', 'стал', 'удобрен'),
+    'INDUSTRIALS': ('контейнер', 'промышлен', 'машиностро', 'портов', 'судоход'),
+    'CONSUMER_DISCRETIONARY': ('электроник', 'бытов', 'непродовольствен', 'автомобил'),
+    'CONSUMER_STAPLES': ('продовольствен', 'пищев', 'агропромышлен'),
+    'HEALTH_CARE': ('клиник', 'медицин', 'госпитал', 'фармацевт', 'лекарств'),
+    'FINANCIALS': ('банковск', 'банкомат', 'страхов', 'депозит'),
+    'INFORMATION_TECHNOLOGY': ('кибербезопас', 'программно', 'разработчик'),
+    'COMMUNICATION_SERVICES': ('телеком', 'сотов', 'мобильн', 'широкополос'),
+    'UTILITIES': ('электроэнерг', 'генераци', 'теплоснабж', 'энергоснабж', 'энергосбыт'),
+    'REAL_ESTATE': ('девелоп', 'строитель', 'недвижим', 'жилищн'),
 }
 ROLE_TERMS = {
     'CFO': ('оплат', 'предоплат', 'платеж', 'аванс', 'дебитор', 'кредитор', 'денеж', 'поступлен', 'финанс', 'бюджет',
@@ -14,7 +25,8 @@ ROLE_TERMS = {
             'инфляц', 'марж', 'затрат', 'себестоим'),
     'COO': ('постав', 'достав', 'комплект', 'прием', 'приём', 'график', 'расписан',
             'слот', 'загруз', 'очеред', 'обработ', 'мощност', 'пропуск',
-            'маршрут', 'логист', 'отгруз', 'упаков', 'сортиров', 'маркиров', 'сборк', 'рейс', 'смен'),
+            'маршрут', 'логист', 'отгруз', 'упаков', 'сортиров', 'маркиров', 'сборк', 'рейс', 'смен',
+            'внедрен', 'внедрени', 'мощност', 'обработ', 'доступност'),
 }
 
 
@@ -28,17 +40,27 @@ def _hits(words, stems):
                for stem in {stem.replace('ё', 'е') for stem in stems})
 
 
-def _sectors(words):
-    supported = {name for name, stems in SECTOR_TERMS.items() if _hits(words, stems)}
+def _sectors(words, category=None):
+    # Preserve the two-sector legacy rubric; broader public profiles use the full taxonomy.
+    terms = {k:v for k,v in SECTOR_TERMS.items() if k in {'TRADE','TRANSPORT'}} if category in {'TRADE','TRANSPORT'} else SECTOR_TERMS
+    supported = {name for name, stems in terms.items() if _hits(words, stems)}
+    if category not in {'TRADE','TRANSPORT'} and _hits(words,('информационн',)) and _hits(words,('безопасност',)):
+        supported.add('INFORMATION_TECHNOLOGY')
+    if _hits(words,('инсайдер','бирж','трейдер')):
+        supported.discard('TRADE')
     # Warehouse operators/storage can identify logistics. A warehouse batch in
     # an explicitly trade clause describes an operation, not a second industry.
     warehouse = _hits(words, ('склад', 'хранен'))
     if warehouse and (not supported or _hits(words, ('оператор',))):
         supported.add('TRANSPORT')
+    if category == 'INDUSTRIALS' and 'TRANSPORT' in supported:
+        supported.discard('TRANSPORT'); supported.add('INDUSTRIALS')
+    if category in {'CONSUMER_DISCRETIONARY','CONSUMER_STAPLES'} and 'TRADE' in supported:
+        supported.discard('TRADE'); supported.add(category)
     return supported
 
 
-def source_relevance(text, category, role, activity_name=''):
+def source_relevance(text, category, role, activity_name='', *, strict=False):
     """Prefer role terms in the same clause as the supported profile category.
 
     Neutral macro news can match a role across sectors. A financial clause for
@@ -52,9 +74,14 @@ def source_relevance(text, category, role, activity_name=''):
     for clause in re.split(r'(?<=[.!?;])\s+|\n+', text or ''):
         clause = clause.strip()
         words = _words(clause)
-        sectors = _sectors(words)
+        sectors = _sectors(words, category)
         own_hits, other_hits = category in sectors, bool(sectors - {category})
         role_hits = _hits(words, ROLE_TERMS.get(role, ()))
+        if strict:
+            meaningful={'CFO':('ставк','кредит','финансирован','оборотн','платеж','оплат','дебитор','кредитор','ликвид','денежн','марж','себестоим','бюджет','налог','расход','инвестиц','выручк'),
+                        'COO':('постав','достав','отгруз','график','мощност','внедрен','перевоз','ремонт','обработк','подключен','рейс','смен')}
+            role_hits=_hits(words,meaningful.get(role,()))
+            if not role_hits and _hits(words,('поздрав','наград','праздник','преми','социальн')):continue
         if own_hits and not other_hits:
             activity_hits = _hits(words, activity_terms)
             score = 40 + 10 * min(role_hits, 3) + 20 * min(activity_hits, 2)

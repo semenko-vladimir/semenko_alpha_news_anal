@@ -1,0 +1,443 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-25T21:01:35.302288Z",
+  "companies": [
+    {
+      "company_id": "PUB_LUKOIL",
+      "sector_id": "ENERGY",
+      "display_name": "ЛУКОЙЛ",
+      "legal_name": "ПАО «ЛУКОЙЛ»",
+      "entity_scope": "group",
+      "activity": "Добыча и переработка нефти и газа, сбыт нефтепродуктов.",
+      "as_of": "2025-12-31",
+      "sources": [
+        {
+          "uri": "https://www.lukoil.com/Company/CorporateProfile",
+          "title": "ЛУКОЙЛ — корпоративный профиль",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": null,
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Вертикально интегрированная нефтегазовая компания. Корпоративный профиль приводит производственные показатели за 2025 год; они не являются выручкой."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "Переработка в России",
+          "value": 41.7,
+          "unit": "млн тонн",
+          "currency": null,
+          "period": "2025",
+          "scope": "group",
+          "source_index": 0
+        }
+      ]
+    },
+    {
+      "company_id": "PUB_NORNICKEL",
+      "sector_id": "MATERIALS",
+      "display_name": "Норникель",
+      "legal_name": "ПАО «ГМК «Норильский никель»",
+      "entity_scope": "group",
+      "activity": "Производство никеля, меди, палладия и платины.",
+      "as_of": "2026-06-30",
+      "sources": [
+        {
+          "uri": "https://atlas2025.nornickel.ru/key-facts-figures/",
+          "title": "Норникель — ключевые цифры и факты 2025",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": null,
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Годовые показатели 2025: выручка 1 147,2 млрд рублей. Показатель относится к консолидированной отчётности, а не к каждой организации группы."
+        },
+        {
+          "uri": "https://nornickel.ru/news-and-media/press-releases-and-news/nornikel-obyavlyaet-promezhutochnye-konsolidirovannye-finansovye-rezultaty-po-msfo-za-pervoe-polugodie-2026-goda/",
+          "title": "Норникель — результаты по МСФО за 1 полугодие 2026",
+          "locator": "Ключевые показатели; для PDF — страницы 1 и 3",
+          "published_at": "2026-07-31T00:00:00Z",
+          "retrieved_at": "2026-10-25T21:01:35.302288Z",
+          "statement": "В промежуточных результатах группы за первое полугодие 2026 года указана выручка 8,3 млрд долларов США. Пересчёт в рубли не выполнялся."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "Выручка",
+          "value": 8.3,
+          "unit": "млрд $",
+          "currency": "USD",
+          "period": "2026-H1",
+          "scope": "group",
+          "source_index": 1
+        },
+        {
+          "name": "Выручка",
+          "value": 1147.2,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2025",
+          "scope": "group",
+          "source_index": 0
+        }
+      ]
+    },
+    {
+      "company_id": "PUB_FESCO",
+      "sector_id": "INDUSTRIALS",
+      "display_name": "FESCO",
+      "legal_name": "ПАО «Дальневосточное морское пароходство» — группа FESCO",
+      "entity_scope": "group",
+      "activity": "Морские, железнодорожные и контейнерные перевозки, порты и логистика.",
+      "as_of": "2026-06-30",
+      "sources": [
+        {
+          "uri": "https://ar2025.fesco.ru/download/full-reports/ar_ru_annual-report_pages_fesco_2025.pdf",
+          "title": "Годовой отчёт FESCO за 2025 год",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": null,
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Консолидированная выручка FESCO за 2025 год — 171 583 млн рублей. Группа развивает транспортные, портовые и логистические сервисы."
+        },
+        {
+          "uri": "https://www.fesco.ru/ru/press-center/news/finansovye-i-operatsionnye-rezultaty-deyatelnosti-transportnoy-gruppy-fesco-za-shest-mesyatsev-2026-/",
+          "title": "FESCO — финансовые и операционные результаты за 6 месяцев 2026",
+          "locator": "Ключевые показатели; для PDF — страницы 1 и 3",
+          "published_at": "2026-08-31T00:00:00Z",
+          "retrieved_at": "2026-10-25T21:01:35.302288Z",
+          "statement": "За шесть месяцев до 30 июня 2026 года группа сообщила выручку 92 074 млн рублей. Это полугодовой показатель, а не годовая выручка."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "Выручка",
+          "value": 92074,
+          "unit": "млн ₽",
+          "currency": "RUB",
+          "period": "2026-H1",
+          "scope": "group",
+          "source_index": 1
+        },
+        {
+          "name": "Выручка",
+          "value": 171583,
+          "unit": "млн ₽",
+          "currency": "RUB",
+          "period": "2025",
+          "scope": "group",
+          "source_index": 0
+        }
+      ]
+    },
+    {
+      "company_id": "PUB_MVIDEO",
+      "sector_id": "CONSUMER_DISCRETIONARY",
+      "display_name": "М.Видео",
+      "legal_name": "ПАО «М.видео»",
+      "entity_scope": "group",
+      "activity": "Электронная коммерция и розничная торговля электроникой и бытовой техникой.",
+      "as_of": "2026-06-30",
+      "sources": [
+        {
+          "uri": "https://www.mvideoeldorado.ru/ru/press-centr/press-relizy/detail/4211",
+          "title": "М.Видео — результаты за 2025 год",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": "2026-04-30T00:00:00Z",
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Компания сообщает выручку 324,8 млрд рублей за 2025 год. Продажи GMV в той же публикации являются отдельным показателем и не заменяют выручку."
+        },
+        {
+          "uri": "https://www.mvideoeldorado.ru/ru/press-centr/press-relizy/detail/4389",
+          "title": "М.Видео–Эльдорадо — результаты за 1 полугодие 2026",
+          "locator": "Ключевые показатели; для PDF — страницы 1 и 3",
+          "published_at": "2026-08-31T00:00:00Z",
+          "retrieved_at": "2026-10-25T21:01:35.302288Z",
+          "statement": "Выручка группы за первое полугодие 2026 года составила 108,2 млрд рублей. GMV и выручка в публикации различаются."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "Выручка",
+          "value": 108.2,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2026-H1",
+          "scope": "group",
+          "source_index": 1
+        },
+        {
+          "name": "Выручка",
+          "value": 324.8,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2025",
+          "scope": "group",
+          "source_index": 0
+        }
+      ]
+    },
+    {
+      "company_id": "PUB_MAGNIT",
+      "sector_id": "CONSUMER_STAPLES",
+      "display_name": "Магнит",
+      "legal_name": "ПАО «Магнит»",
+      "entity_scope": "group",
+      "activity": "Розничная торговля продовольственными товарами и товарами повседневного спроса.",
+      "as_of": "2026-06-30",
+      "sources": [
+        {
+          "uri": "https://www.magnit.com/ru/shareholders-and-investors/key-figures/",
+          "title": "Магнит — ключевые показатели",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": null,
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "В таблице за 2025 год указаны выручка 3 509 млрд рублей и 33 440 магазинов. Данные относятся к отчётному году, не к текущему моменту."
+        },
+        {
+          "uri": "https://www.magnit.com/ru/about-company/about-magnit/",
+          "title": "Магнит — сведения о группе и показатели за 1 полугодие 2026",
+          "locator": "Ключевые показатели; для PDF — страницы 1 и 3",
+          "published_at": null,
+          "retrieved_at": "2026-10-25T21:01:35.302288Z",
+          "statement": "Официальная страница группы приводит выручку 1 887 млрд рублей за первое полугодие 2026 года до применения МСФО 16 и 33 652 торговые точки на 30 июня 2026 года. Дата публикации страницы не указана."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "Выручка",
+          "value": 1887,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2026-H1, до МСФО 16",
+          "scope": "group",
+          "source_index": 1
+        },
+        {
+          "name": "Торговые точки",
+          "value": 33652,
+          "unit": "шт.",
+          "currency": null,
+          "period": "2026-06-30",
+          "scope": "group",
+          "source_index": 1
+        },
+        {
+          "name": "Выручка",
+          "value": 3509,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2025",
+          "scope": "group",
+          "source_index": 0
+        },
+        {
+          "name": "Количество магазинов",
+          "value": 33440,
+          "unit": "магазинов",
+          "currency": null,
+          "period": "2025",
+          "scope": "group",
+          "source_index": 0
+        }
+      ]
+    },
+    {
+      "company_id": "PUB_MDMEDICAL",
+      "sector_id": "HEALTH_CARE",
+      "display_name": "Мать и дитя",
+      "legal_name": "МКПАО «МД Медикал Груп»",
+      "entity_scope": "group",
+      "activity": "Частные медицинские услуги, госпитали и амбулаторные клиники.",
+      "as_of": "2026-06-30",
+      "sources": [
+        {
+          "uri": "https://www.mcclinics.ru/media/news/financial-results-2025/?year=2026",
+          "title": "МД Медикал — финансовые результаты за 2025 год",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": "2026-03-30T00:00:00Z",
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Группа публикует аудированные консолидированные результаты за 2025 год: выручка 43 455 млн рублей. Медицинские услуги зависят от персонала и доступности инфраструктуры."
+        },
+        {
+          "uri": "https://www.mcclinics.ru/upload/iblock/1e6/zq5nh16esf1fh2xut6vb1sbdgk0l9bk0.pdf",
+          "title": "МД Медикал — финансовые результаты за 1 полугодие 2026",
+          "locator": "Ключевые показатели; для PDF — страницы 1 и 3",
+          "published_at": "2026-08-28T00:00:00Z",
+          "retrieved_at": "2026-10-25T21:01:35.302288Z",
+          "statement": "В пресс-релизе по консолидированным результатам за шесть месяцев до 30 июня 2026 года указана выручка 24 809 млн рублей. Данные годового и полугодового периодов не объединяются."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "Выручка",
+          "value": 24809,
+          "unit": "млн ₽",
+          "currency": "RUB",
+          "period": "2026-H1",
+          "scope": "group",
+          "source_index": 1
+        },
+        {
+          "name": "Выручка",
+          "value": 43455,
+          "unit": "млн ₽",
+          "currency": "RUB",
+          "period": "2025",
+          "scope": "group",
+          "source_index": 0
+        }
+      ]
+    },
+    {
+      "company_id": "PUB_SBER",
+      "sector_id": "FINANCIALS",
+      "display_name": "Сбер",
+      "legal_name": "ПАО Сбербанк",
+      "entity_scope": "organisation",
+      "activity": "Банковские услуги: счета, платежи, привлечение и размещение средств.",
+      "as_of": null,
+      "sources": [
+        {
+          "uri": "https://www.cbr.ru/finorg/foinfo/?ogrn=1027700132195",
+          "title": "Банк России — сведения о ПАО Сбербанк",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": null,
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Официальный реестр Банка России содержит сведения о ПАО Сбербанк и банковской лицензии 1481. Банковские показатели не подменяются выручкой нефинансовой компании."
+        }
+      ],
+      "metrics": []
+    },
+    {
+      "company_id": "PUB_POSITIVE",
+      "sector_id": "INFORMATION_TECHNOLOGY",
+      "display_name": "Группа Позитив",
+      "legal_name": "ПАО «Группа Позитив»",
+      "entity_scope": "group",
+      "activity": "Разработка продуктов и услуг информационной безопасности.",
+      "as_of": "2026-06-30",
+      "sources": [
+        {
+          "uri": "https://group.ptsecurity.com/ru/news/pt-increased-the-volume-of-shipments-by-40-by-the-end-of-2025",
+          "title": "Positive Technologies — итоги 2025 года",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": "2026-04-07T00:00:00Z",
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "В итоговой публикации за 2025 год объём оплаченных отгрузок составляет 33,6 млрд рублей. Отгрузки не обозначаются в профиле как выручка."
+        },
+        {
+          "uri": "https://group.ptsecurity.com/ru/news/in-the-first-six-months-of-2026-pt-increased-its-shipments-by-45-to-10-7-billion-rubles",
+          "title": "Positive Technologies — отгрузки за 1 полугодие 2026",
+          "locator": "Ключевые показатели; для PDF — страницы 1 и 3",
+          "published_at": "2026-07-27T00:00:00Z",
+          "retrieved_at": "2026-10-25T21:01:35.302288Z",
+          "statement": "За первое полугодие 2026 года компания сообщила объём отгрузок 10,7 млрд рублей. Отгрузки не считаются выручкой, а прогноз на год — состоявшимся результатом."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "Отгрузки",
+          "value": 10.7,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2026-H1",
+          "scope": "group",
+          "source_index": 1
+        },
+        {
+          "name": "Оплаченные отгрузки",
+          "value": 33.6,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2025",
+          "scope": "group",
+          "source_index": 0
+        }
+      ]
+    },
+    {
+      "company_id": "PUB_MTS",
+      "sector_id": "COMMUNICATION_SERVICES",
+      "display_name": "МТС",
+      "legal_name": "ПАО «МТС»",
+      "entity_scope": "group",
+      "activity": "Услуги связи, телекоммуникационная инфраструктура и цифровые сервисы.",
+      "as_of": "2026-06-30",
+      "sources": [
+        {
+          "uri": "https://ir.mts.ru/news_and_events/corporate_releases/details/742310",
+          "title": "МТС — финансовые и операционные результаты за 4 квартал 2025",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": "2026-03-05T00:00:00Z",
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Публикация приводит выручку группы за четвёртый квартал 2025 года 222,5 млрд рублей. Квартальное значение не выдается за годовое."
+        },
+        {
+          "uri": "https://ir.mts.ru/news_and_events/corporate_releases/details/742437",
+          "title": "МТС — результаты за 2 квартал 2026",
+          "locator": "Ключевые показатели; для PDF — страницы 1 и 3",
+          "published_at": "2026-08-25T00:00:00Z",
+          "retrieved_at": "2026-10-25T21:01:35.302288Z",
+          "statement": "Во втором квартале 2026 года выручка группы составила 213,5 млрд рублей. Значение относится к кварталу, а не ко всему 2026 году."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "Выручка",
+          "value": 213.5,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2026-Q2",
+          "scope": "group",
+          "source_index": 1
+        },
+        {
+          "name": "Выручка",
+          "value": 222.5,
+          "unit": "млрд ₽",
+          "currency": "RUB",
+          "period": "2025-Q4",
+          "scope": "group",
+          "source_index": 0
+        }
+      ]
+    },
+    {
+      "company_id": "PUB_INTERRAO",
+      "sector_id": "UTILITIES",
+      "display_name": "Интер РАО",
+      "legal_name": "ПАО «Интер РАО»",
+      "entity_scope": "group",
+      "activity": "Производство и сбыт электроэнергии, энерготрейдинг и энергетические сервисы.",
+      "as_of": null,
+      "sources": [
+        {
+          "uri": "https://www.interrao.ru/investors/?desktop=",
+          "title": "Интер РАО — акционерам и инвесторам",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": null,
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Официальный раздел раскрывает материалы группы, финансовую и производственную отчётность. Сопоставимые текущие числовые показатели для этого профиля ещё не подтверждены."
+        }
+      ],
+      "metrics": []
+    },
+    {
+      "company_id": "PUB_PIK",
+      "sector_id": "REAL_ESTATE",
+      "display_name": "ПИК",
+      "legal_name": "ПАО «ПИК-специализированный застройщик»",
+      "entity_scope": "group",
+      "activity": "Жилищное строительство и девелопмент недвижимости.",
+      "as_of": null,
+      "sources": [
+        {
+          "uri": "https://pik-group.ru/about/share-capital/information-disclosure/annual-report",
+          "title": "ПИК — годовые отчёты",
+          "locator": "Раздел о деятельности / ключевые показатели",
+          "published_at": null,
+          "retrieved_at": "2026-10-25T19:52:15.472090Z",
+          "statement": "Официальный раздел содержит годовой отчёт за 2025 год. Числовые показатели без однозначно подтверждённых единиц и периода в профиль не добавлены."
+        }
+      ],
+      "metrics": []
+    }
+  ]
+}

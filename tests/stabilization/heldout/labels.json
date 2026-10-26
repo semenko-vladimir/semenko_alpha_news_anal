@@ -1,0 +1,525 @@
+{
+  "dataset_id": "MVP-SEQUENTIAL-001-QUALITYSET-v4",
+  "labels": [
+    {
+      "case_id": "wf_01",
+      "expected": {
+        "event_fact": "Only the literal synthetic clauses in the selected bulletin: Синтетическая сводка об оплате фруктовых партий и грузовых слотах",
+        "exposure": "unknown",
+        "role_relevant_topics": [
+          "потребность в оборотном капитале при предоплате фруктовых и овощных партий"
+        ],
+        "must_not_assert_company_exposure": true,
+        "bank_position": "not_checked",
+        "selected_event_id": "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f",
+        "selection_order": [
+          "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f",
+          "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa"
+        ],
+        "must_preserve_unknowns": [
+          "actual event exposure",
+          "financial magnitude"
+        ],
+        "assessment_targets": {
+          "relevance_topics": [
+            "потребность в оборотном капитале при предоплате фруктовых и овощных партий"
+          ],
+          "expected_selected_event_id": "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f"
+        }
+      },
+      "rationale": "Pre-output editorial priority: within the declared main activity, CFO prioritizes the financial clause and COO the operational clause. The other bulletin carries the other role dimension for that activity; its role-matched clause concerns the other category. No asset, contract, credit, exposure or monetary effect follows from main OKVED. Topic for this case: потребность в оборотном капитале при предоплате фруктовых и овощных партий."
+    },
+    {
+      "case_id": "wf_02",
+      "expected": {
+        "event_fact": "Only the literal synthetic clauses in the selected bulletin: Синтетическая сводка об окнах приёмки и расчётах за перевозки",
+        "exposure": "unknown",
+        "role_relevant_topics": [
+          "окна приёмки фруктов и овощей и графики доставки"
+        ],
+        "must_not_assert_company_exposure": true,
+        "bank_position": "not_checked",
+        "selected_event_id": "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa",
+        "selection_order": [
+          "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa",
+          "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f"
+        ],
+        "must_preserve_unknowns": [
+          "actual event exposure",
+          "financial magnitude"
+        ],
+        "assessment_targets": {
+          "relevance_topics": [
+            "окна приёмки фруктов и овощей и графики доставки"
+          ],
+          "expected_selected_event_id": "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa"
+        }
+      },
+      "rationale": "Pre-output editorial priority: within the declared main activity, CFO prioritizes the financial clause and COO the operational clause. The other bulletin carries the other role dimension for that activity; its role-matched clause concerns the other category. No asset, contract, credit, exposure or monetary effect follows from main OKVED. Topic for this case: окна приёмки фруктов и овощей и графики доставки."
+    },
+    {
+      "case_id": "wf_03",
+      "expected": {
+        "event_fact": "Only the literal synthetic clauses in the selected bulletin: Синтетическая сводка об обеспечении оплаты оборудования и складской обработке",
+        "exposure": "unknown",
+        "role_relevant_topics": [
+          "требования к обеспечению оплаты партий машин и оборудования"
+        ],
+        "must_not_assert_company_exposure": true,
+        "bank_position": "not_checked",
+        "selected_event_id": "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e",
+        "selection_order": [
+          "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e",
+          "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e"
+        ],
+        "must_preserve_unknowns": [
+          "actual event exposure",
+          "financial magnitude"
+        ],
+        "assessment_targets": {
+          "relevance_topics": [
+            "требования к обеспечению оплаты партий машин и оборудования"
+          ],
+          "expected_selected_event_id": "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e"
+        }
+      },
+      "rationale": "Pre-output editorial priority: within the declared main activity, CFO prioritizes the financial clause and COO the operational clause. The other bulletin carries the other role dimension for that activity; its role-matched clause concerns the other category. No asset, contract, credit, exposure or monetary effect follows from main OKVED. Topic for this case: требования к обеспечению оплаты партий машин и оборудования."
+    },
+    {
+      "case_id": "wf_04",
+      "expected": {
+        "event_fact": "Only the literal synthetic clauses in the selected bulletin: Синтетическая сводка о комплектации оборудования и оплате хранения",
+        "exposure": "unknown",
+        "role_relevant_topics": [
+          "сроки комплектации машин и оборудования и планирование поставок"
+        ],
+        "must_not_assert_company_exposure": true,
+        "bank_position": "not_checked",
+        "selected_event_id": "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e",
+        "selection_order": [
+          "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e",
+          "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e"
+        ],
+        "must_preserve_unknowns": [
+          "actual event exposure",
+          "financial magnitude"
+        ],
+        "assessment_targets": {
+          "relevance_topics": [
+            "сроки комплектации машин и оборудования и планирование поставок"
+          ],
+          "expected_selected_event_id": "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e"
+        }
+      },
+      "rationale": "Pre-output editorial priority: within the declared main activity, CFO prioritizes the financial clause and COO the operational clause. The other bulletin carries the other role dimension for that activity; its role-matched clause concerns the other category. No asset, contract, credit, exposure or monetary effect follows from main OKVED. Topic for this case: сроки комплектации машин и оборудования и планирование поставок."
+    },
+    {
+      "case_id": "wf_05",
+      "expected": {
+        "event_fact": "Only the literal synthetic clauses in the selected bulletin: Синтетическая сводка об окнах приёмки и расчётах за перевозки",
+        "exposure": "unknown",
+        "role_relevant_topics": [
+          "отсрочки оплаты грузовых железнодорожных перевозок и график денежных поступлений"
+        ],
+        "must_not_assert_company_exposure": true,
+        "bank_position": "not_checked",
+        "selected_event_id": "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa",
+        "selection_order": [
+          "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa",
+          "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f"
+        ],
+        "must_preserve_unknowns": [
+          "actual event exposure",
+          "financial magnitude"
+        ],
+        "assessment_targets": {
+          "relevance_topics": [
+            "отсрочки оплаты грузовых железнодорожных перевозок и график денежных поступлений"
+          ],
+          "expected_selected_event_id": "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa"
+        }
+      },
+      "rationale": "Pre-output editorial priority: within the declared main activity, CFO prioritizes the financial clause and COO the operational clause. The other bulletin carries the other role dimension for that activity; its role-matched clause concerns the other category. No asset, contract, credit, exposure or monetary effect follows from main OKVED. Topic for this case: отсрочки оплаты грузовых железнодорожных перевозок и график денежных поступлений."
+    },
+    {
+      "case_id": "wf_06",
+      "expected": {
+        "event_fact": "Only the literal synthetic clauses in the selected bulletin: Синтетическая сводка об оплате фруктовых партий и грузовых слотах",
+        "exposure": "unknown",
+        "role_relevant_topics": [
+          "грузовые железнодорожные слоты и расписания"
+        ],
+        "must_not_assert_company_exposure": true,
+        "bank_position": "not_checked",
+        "selected_event_id": "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f",
+        "selection_order": [
+          "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f",
+          "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa"
+        ],
+        "must_preserve_unknowns": [
+          "actual event exposure",
+          "financial magnitude"
+        ],
+        "assessment_targets": {
+          "relevance_topics": [
+            "грузовые железнодорожные слоты и расписания"
+          ],
+          "expected_selected_event_id": "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f"
+        }
+      },
+      "rationale": "Pre-output editorial priority: within the declared main activity, CFO prioritizes the financial clause and COO the operational clause. The other bulletin carries the other role dimension for that activity; its role-matched clause concerns the other category. No asset, contract, credit, exposure or monetary effect follows from main OKVED. Topic for this case: грузовые железнодорожные слоты и расписания."
+    },
+    {
+      "case_id": "wf_07",
+      "expected": {
+        "event_fact": "Only the literal synthetic clauses in the selected bulletin: Синтетическая сводка о комплектации оборудования и оплате хранения",
+        "exposure": "unknown",
+        "role_relevant_topics": [
+          "отсрочки оплаты услуг хранения и ликвидность"
+        ],
+        "must_not_assert_company_exposure": true,
+        "bank_position": "not_checked",
+        "selected_event_id": "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e",
+        "selection_order": [
+          "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e",
+          "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e"
+        ],
+        "must_preserve_unknowns": [
+          "actual event exposure",
+          "financial magnitude"
+        ],
+        "assessment_targets": {
+          "relevance_topics": [
+            "отсрочки оплаты услуг хранения и ликвидность"
+          ],
+          "expected_selected_event_id": "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e"
+        }
+      },
+      "rationale": "Pre-output editorial priority: within the declared main activity, CFO prioritizes the financial clause and COO the operational clause. The other bulletin carries the other role dimension for that activity; its role-matched clause concerns the other category. No asset, contract, credit, exposure or monetary effect follows from main OKVED. Topic for this case: отсрочки оплаты услуг хранения и ликвидность."
+    },
+    {
+      "case_id": "wf_08",
+      "expected": {
+        "event_fact": "Only the literal synthetic clauses in the selected bulletin: Синтетическая сводка об обеспечении оплаты оборудования и складской обработке",
+        "exposure": "unknown",
+        "role_relevant_topics": [
+          "окна складской обработки, загрузка и очереди"
+        ],
+        "must_not_assert_company_exposure": true,
+        "bank_position": "not_checked",
+        "selected_event_id": "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e",
+        "selection_order": [
+          "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e",
+          "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e"
+        ],
+        "must_preserve_unknowns": [
+          "actual event exposure",
+          "financial magnitude"
+        ],
+        "assessment_targets": {
+          "relevance_topics": [
+            "окна складской обработки, загрузка и очереди"
+          ],
+          "expected_selected_event_id": "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e"
+        }
+      },
+      "rationale": "Pre-output editorial priority: within the declared main activity, CFO prioritizes the financial clause and COO the operational clause. The other bulletin carries the other role dimension for that activity; its role-matched clause concerns the other category. No asset, contract, credit, exposure or monetary effect follows from main OKVED. Topic for this case: окна складской обработки, загрузка и очереди."
+    },
+    {
+      "case_id": "prov_01",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "observed_fact has no resolvable evidence reference"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "prov_02",
+      "expected": {
+        "validated_candidate": true,
+        "required_exposure_status": "unknown",
+        "date_semantics_scored": false
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "prov_03",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "evidence reference does not resolve"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "prov_04",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "confirmed exposure has no trusted relationship flag"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "prov_05",
+      "expected": {
+        "validated_candidate": true,
+        "required_exposure_status": "unknown",
+        "scope": "fixed safe candidate structure only; source instruction handling is not scored"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "prov_06",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "bank position has no ISO document date"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "prov_07",
+      "expected": {
+        "validated_candidate": false,
+        "reason": "conflicting kind metadata for one source ID must be rejected or reconciled upstream"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    },
+    {
+      "case_id": "prov_08",
+      "expected": {
+        "validated_candidate": true,
+        "required_exposure_status": "confirmed",
+        "required_evidence_ref": "e8",
+        "scope": "structural trusted-flag boundary only; flag truth and scope are not scored"
+      },
+      "rationale": "Observable predicate over AnalysisResult.validated and its candidate fields, limited to public structural guarantees; no claim truth, news-date semantics, source-instruction resistance, or upstream flag truth is inferred."
+    }
+  ],
+  "contrast_groups": {
+    "role": [
+      {
+        "group_id": "role_1",
+        "case_ids": [
+          "wf_01",
+          "wf_02"
+        ],
+        "controlled_fields": [
+          "ordered_event_candidates",
+          "source_mapping",
+          "company"
+        ],
+        "changed_fields": [
+          "role_id"
+        ],
+        "expected_difference": {
+          "selected_event_ids": [
+            "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f",
+            "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa"
+          ],
+          "interpretation_topics": [
+            "потребность в оборотном капитале при предоплате фруктовых и овощных партий",
+            "окна приёмки фруктов и овощей и графики доставки"
+          ]
+        },
+        "basis": "Declared main activity and selected role only; exposure and financial magnitude stay unknown."
+      },
+      {
+        "group_id": "role_2",
+        "case_ids": [
+          "wf_03",
+          "wf_04"
+        ],
+        "controlled_fields": [
+          "ordered_event_candidates",
+          "source_mapping",
+          "company"
+        ],
+        "changed_fields": [
+          "role_id"
+        ],
+        "expected_difference": {
+          "selected_event_ids": [
+            "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e",
+            "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e"
+          ],
+          "interpretation_topics": [
+            "требования к обеспечению оплаты партий машин и оборудования",
+            "сроки комплектации машин и оборудования и планирование поставок"
+          ]
+        },
+        "basis": "Declared main activity and selected role only; exposure and financial magnitude stay unknown."
+      },
+      {
+        "group_id": "role_3",
+        "case_ids": [
+          "wf_05",
+          "wf_06"
+        ],
+        "controlled_fields": [
+          "ordered_event_candidates",
+          "source_mapping",
+          "company"
+        ],
+        "changed_fields": [
+          "role_id"
+        ],
+        "expected_difference": {
+          "selected_event_ids": [
+            "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa",
+            "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f"
+          ],
+          "interpretation_topics": [
+            "отсрочки оплаты грузовых железнодорожных перевозок и график денежных поступлений",
+            "грузовые железнодорожные слоты и расписания"
+          ]
+        },
+        "basis": "Declared main activity and selected role only; exposure and financial magnitude stay unknown."
+      },
+      {
+        "group_id": "role_4",
+        "case_ids": [
+          "wf_07",
+          "wf_08"
+        ],
+        "controlled_fields": [
+          "ordered_event_candidates",
+          "source_mapping",
+          "company"
+        ],
+        "changed_fields": [
+          "role_id"
+        ],
+        "expected_difference": {
+          "selected_event_ids": [
+            "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e",
+            "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e"
+          ],
+          "interpretation_topics": [
+            "отсрочки оплаты услуг хранения и ликвидность",
+            "окна складской обработки, загрузка и очереди"
+          ]
+        },
+        "basis": "Declared main activity and selected role only; exposure and financial magnitude stay unknown."
+      }
+    ],
+    "profile": [
+      {
+        "group_id": "profile_1",
+        "case_ids": [
+          "wf_01",
+          "wf_05"
+        ],
+        "controlled_fields": [
+          "ordered_event_candidates",
+          "source_mapping",
+          "role_id"
+        ],
+        "changed_fields": [
+          "company.fixture_key",
+          "native MAINOKVED_CODE/NAME",
+          "derived category"
+        ],
+        "expected_difference": {
+          "selected_event_ids": [
+            "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f",
+            "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa"
+          ],
+          "interpretation_topics": [
+            "потребность в оборотном капитале при предоплате фруктовых и овощных партий",
+            "отсрочки оплаты грузовых железнодорожных перевозок и график денежных поступлений"
+          ]
+        },
+        "basis": "Declared main activity and selected role only; exposure and financial magnitude stay unknown."
+      },
+      {
+        "group_id": "profile_2",
+        "case_ids": [
+          "wf_02",
+          "wf_06"
+        ],
+        "controlled_fields": [
+          "ordered_event_candidates",
+          "source_mapping",
+          "role_id"
+        ],
+        "changed_fields": [
+          "company.fixture_key",
+          "native MAINOKVED_CODE/NAME",
+          "derived category"
+        ],
+        "expected_difference": {
+          "selected_event_ids": [
+            "news:92924f137ea86f7993daf04156542c53ba22c9503fe73dfdd0095f1676a0ecfa",
+            "news:0c99908aab9c8dd74be5e45a2419d6750fb853228c17c59613f31eadf2dd2a8f"
+          ],
+          "interpretation_topics": [
+            "окна приёмки фруктов и овощей и графики доставки",
+            "грузовые железнодорожные слоты и расписания"
+          ]
+        },
+        "basis": "Declared main activity and selected role only; exposure and financial magnitude stay unknown."
+      },
+      {
+        "group_id": "profile_3",
+        "case_ids": [
+          "wf_03",
+          "wf_07"
+        ],
+        "controlled_fields": [
+          "ordered_event_candidates",
+          "source_mapping",
+          "role_id"
+        ],
+        "changed_fields": [
+          "company.fixture_key",
+          "native MAINOKVED_CODE/NAME",
+          "derived category"
+        ],
+        "expected_difference": {
+          "selected_event_ids": [
+            "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e",
+            "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e"
+          ],
+          "interpretation_topics": [
+            "требования к обеспечению оплаты партий машин и оборудования",
+            "отсрочки оплаты услуг хранения и ликвидность"
+          ]
+        },
+        "basis": "Declared main activity and selected role only; exposure and financial magnitude stay unknown."
+      },
+      {
+        "group_id": "profile_4",
+        "case_ids": [
+          "wf_04",
+          "wf_08"
+        ],
+        "controlled_fields": [
+          "ordered_event_candidates",
+          "source_mapping",
+          "role_id"
+        ],
+        "changed_fields": [
+          "company.fixture_key",
+          "native MAINOKVED_CODE/NAME",
+          "derived category"
+        ],
+        "expected_difference": {
+          "selected_event_ids": [
+            "news:933072a25955f6565368dd32e14de97da816ead844710522702a5d120514b75e",
+            "news:85d2889bfafc220bc71f119a31d69fde04300ad746c33bfd5d5b941b81915e9e"
+          ],
+          "interpretation_topics": [
+            "сроки комплектации машин и оборудования и планирование поставок",
+            "окна складской обработки, загрузка и очереди"
+          ]
+        },
+        "basis": "Declared main activity and selected role only; exposure and financial magnitude stay unknown."
+      }
+    ]
+  },
+  "oracle_policy": {
+    "origin": "Pre-output editorial judgement from synthetic facts, frozen MVP categories and CFO/COO functions; no product output or ranking implementation used.",
+    "priority": "For the company main activity, financial clause > operational clause for CFO; operational > financial for COO. Cross-category clauses do not establish company activity or exposure.",
+    "ordering": "Two candidates per workflow; first is the role-and-category target, second is the other bulletin. No tie-break based on candidate order or publication time.",
+    "limits": "A deliberately small crossed synthetic preference specification, not empirical client preference or causal business impact. Profile contrasts co-vary access key with native main activity/category; they do not identify effects of unsupported operational attributes."
+  }
+}

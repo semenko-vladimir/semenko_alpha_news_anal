@@ -2,6 +2,12 @@ import unittest
 import uuid
 import subprocess
 import sys
+import hashlib
+import sqlite3
+import tracemalloc
+from contextlib import closing
+from datetime import datetime, timezone
+from unittest.mock import patch
 from pathlib import Path
 
 from backend.news_service import NewsRepository, NewsService, NewsServiceError
@@ -72,6 +78,90 @@ class NewsServiceTests(unittest.TestCase):
         self.assertEqual(result["error"], "network_error")
         self.assertEqual(len(calls), 1)
         self.assertEqual(calls[0][0], "https://www.cbr.ru/rss/RssPress")
+
+    def test_refresh_state_preserves_last_good_and_separates_publication_age(self):
+        xml = b'<rss><channel><item><guid>x</guid><title>good</title><pubDate>Mon, 20 Oct 2025 00:00:00 GMT</pubDate></item><item><guid>y</guid><title>undated</title></item></channel></rss>'
+        adapter = SourceAdapter(lambda *_: xml)
+        repo = NewsRepository(self.temp / "state.sqlite3", adapter=adapter)
+        svc = NewsService(repo)
+        class FixedSourceDateTime(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return cls(2026, 10, 25, tzinfo=timezone.utc if tz else None)
+        with patch("backend.sources.cbr_rss.datetime", FixedSourceDateTime):
+            self.assertEqual(svc.fetch_and_ingest(clock=lambda: "2026-10-25T00:00:00Z")["status"], "ok")
+        saved = repo.latest()
+        failed = NewsService(NewsRepository(self.temp / "state.sqlite3",
+            adapter=SourceAdapter(lambda *_: (_ for _ in ()).throw(TimeoutError()))))
+        self.assertEqual(failed.fetch_and_ingest(clock=lambda: "2026-10-25T01:00:00Z")["status"], "blocked")
+        self.assertEqual(repo.latest(), saved)
+        status = NewsRepository.status_snapshot(self.temp / "state.sqlite3",
+            now=datetime(2026, 10, 25, tzinfo=timezone.utc), stale_after_seconds=3600)
+        self.assertEqual(status["last_attempt"]["status"], "blocked")
+        self.assertEqual(status["last_success_at"], saved[0].source_refs[0]["retrieved_at"])
+        self.assertEqual(status["fetch_freshness"], "fresh")
+        self.assertEqual(status["publication_age"], {"unknown": 1, "future": 0, "stale": 1, "within_threshold": 0})
+
+    def test_status_freshness_future_and_missing_database_is_read_only(self):
+        path = self.temp / "future.sqlite3"
+        repo = NewsRepository(path)
+        self.assertEqual(NewsRepository.status_snapshot(path)["fetch_freshness"], "unknown")
+        repo.record_refresh(attempted_at="2026-10-26T00:00:00Z", status="ok", error=None,
+                            successful_at="2026-10-26T00:00:00Z")
+        status = NewsRepository.status_snapshot(path, now=datetime(2026, 10, 25, tzinfo=timezone.utc))
+        self.assertEqual(status["fetch_freshness"], "future")
+        missing = self.temp / "absent.sqlite3"
+        with self.assertRaisesRegex(NewsServiceError, "database_missing"):
+            NewsRepository.status_snapshot(missing)
+        self.assertFalse(missing.exists())
+
+    def test_status_large_history_counts_stream_with_bounded_python_memory(self):
+        path = self.temp / "large-status.sqlite3"
+        NewsRepository(path)
+        dates = (None, "not-a-date", "2026-10-25T00:00:01Z",
+                 "2026-10-24T22:59:59Z", "2026-10-24T23:00:00Z", "2026-10-24T23:59:59Z")
+        with closing(sqlite3.connect(path)) as db, db:
+            db.executemany(
+                """INSERT INTO news_events
+                (event_id,source_id,title,text,canonical_url,published_at,published_at_raw,
+                 retrieved_at,guid,content_hash,provenance,synthetic,inserted_at)
+                VALUES (?, 'source', NULL,NULL,NULL,?,NULL,'2026-10-25T00:00:00Z',NULL,
+                        'hash','fixture',1,'2026-10-25T00:00:00Z')""",
+                ((f"event-{i}", dates[i % len(dates)]) for i in range(24000)),
+            )
+        before = hashlib.sha256(path.read_bytes()).digest()
+        tracemalloc.start()
+        try:
+            status = NewsRepository.status_snapshot(
+                path, now=datetime(2026, 10, 25, tzinfo=timezone.utc), stale_after_seconds=3600)
+            _, peak = tracemalloc.get_traced_memory()
+        finally:
+            tracemalloc.stop()
+        self.assertEqual(status["news_count"], 24000)
+        self.assertEqual(status["publication_age"], {
+            "unknown": 8000, "future": 4000, "stale": 4000, "within_threshold": 8000})
+        # A full Python list of 25k row values exceeds this comfortably; a 256-row
+        # cursor batch stays well below it. Leave headroom for Python/platform differences.
+        self.assertLess(peak, 1024 * 1024)
+        self.assertEqual(hashlib.sha256(path.read_bytes()).digest(), before)
+
+    def test_invalid_refresh_batch_records_error_without_replacing_last_good(self):
+        from backend.sources.cbr_rss import SourceBatch
+        path = self.temp / "error-state.sqlite3"
+        good_repo = NewsRepository(path, adapter=SourceAdapter(lambda *_: (FIX / "happy.xml").read_bytes()))
+        NewsService(good_repo).fetch_and_ingest()
+        before = good_repo.latest()
+        class InvalidBatchAdapter:
+            def fetch(self):
+                return SourceBatch((object(),), None, "2026-10-25T00:00:00Z", "ok")
+        service = NewsService(NewsRepository(path, adapter=InvalidBatchAdapter()))
+        result = service.fetch_and_ingest(clock=lambda: "2026-10-25T01:00:00Z")
+        self.assertEqual(result["status"], "error")
+        self.assertEqual(good_repo.latest(), before)
+        state = NewsRepository.status_snapshot(path)
+        self.assertEqual(state["last_attempt"]["status"], "error")
+        self.assertEqual(state["last_attempt"]["error"], "malformed_item")
+        self.assertEqual(state["last_success_at"], before[0].source_refs[0]["retrieved_at"])
 
     def test_canonical_source_identity_in_fresh_processes(self):
         # Reproduce discovery's legacy import first without changing this

@@ -32,6 +32,14 @@ EXPOSE 8000
 ENTRYPOINT ["sh", "/app/deploy/entrypoint.sh"]
 CMD ["python", "-m", "uvicorn", "app:app", "--app-dir", "/app/backend", "--host", "0.0.0.0", "--port", "8000"]
 
+FROM api AS product-api
+USER root
+RUN mkdir -p /var/lib/alpha-product && chown 10001:10001 /var/lib/alpha-product
+COPY --chown=10001:10001 data/catalog /app/data/catalog
+USER 10001:10001
+ENTRYPOINT []
+CMD ["python", "-m", "backend.product_server"]
+
 # Unprivileged Nginx serves Vite output and proxies same-origin API requests.
 FROM nginxinc/nginx-unprivileged:1.28-alpine AS web
 COPY --from=web-build --chown=101:101 /src/frontend/dist/ /usr/share/nginx/html/

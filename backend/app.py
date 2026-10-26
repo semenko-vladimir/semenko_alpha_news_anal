@@ -258,7 +258,7 @@ def make_app(db_path: str | Path | None = None, demo_mode: bool | None = None, c
     path = db_path or os.getenv("ALPHA_DB_PATH", ".tmp/demo/demo.sqlite3")
     db = Database(path)
     engine_mode = analysis_engine if analysis_engine is not None else os.getenv("ALPHA_ANALYSIS_ENGINE", "deterministic_demo")
-    if engine_mode in {"mvp_offline", "broker_live"}:
+    if engine_mode in {"mvp_offline", "broker_live", "local_ollama"}:
         if injected_engine is not None:
             raise ValueError("MVP uses server-configured repositories, not injected engines")
         from backend.mvp.api import make_mvp_app

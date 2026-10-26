@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {"id":"mintrans","url":"https://mintrans.gov.ru/press-center/news/","pattern":"^/press-center/news/[0-9]+","article_limit":2},
+    {"id":"lukoil","url":"https://lukoil.ru/PressCenter/Pressreleases","pattern":"/PressCenter/Pressreleases/Pressrelease/","article_limit":2},
+    {"id":"nornickel","url":"https://nornickel.ru/news-and-media/press-releases-and-news/","pattern":"^/news-and-media/press-releases-and-news/[^/]+/","article_limit":2},
+    {"id":"fesco","url":"https://www.fesco.ru/ru/press-center/news/","pattern":"^/ru/press-center/news/[^/]+/","article_limit":2},
+    {"id":"mvideo","url":"https://www.mvideoeldorado.ru/ru/press-center/press-releases","pattern":"/press-relizy/detail/[0-9]+","article_limit":2},
+    {"id":"magnit","url":"https://www.magnit.com/ru/media/press-releases/","pattern":"^/ru/media/press-releases/[^/]+/","article_limit":2},
+    {"id":"mdmedical","url":"https://www.mcclinics.ru/media/news/","pattern":"^/media/news/[^/]+/","article_limit":2},
+    {"id":"positive","url":"https://group.ptsecurity.com/ru/news/","pattern":"^/ru/news/[^/]+","article_limit":2},
+    {"id":"mts","url":"https://ir.mts.ru/news_and_events/corporate_releases/","pattern":"/corporate_releases/details/[0-9]+","article_limit":2},
+    {"id":"interrao","url":"https://www.interrao.ru/press-center/news/","pattern":"^/press-center/news/[^/]+/","article_limit":2},
+    {"id":"pik","url":"https://pik-group.ru/about/news-and-reports","pattern":"^/about/news-and-reports/.+","article_limit":2}
+  ]
+}

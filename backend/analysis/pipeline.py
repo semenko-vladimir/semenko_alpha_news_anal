@@ -196,7 +196,12 @@ class AnalysisPipeline:
     @staticmethod
     def _context(data: AnalysisInput) -> dict[str, Any]:
         # Source text is data only; it is not copied into an instruction-bearing field.
-        return {"company_id": data.company_id, "role_id": data.role_id, "event_id": data.event_id,
+        role_task = {
+            "CFO": "Для CFO: выстройте условную цепочку механизм → возможный финансовый риск/возможность → конкретная проверка до решения. Не выводите экспозицию из отрасли или кредитного флага.",
+            "COO": "Для COO: выстройте условную цепочку механизм → возможное операционное последствие/альтернатива → конкретная проверка процесса до решения. Не выводите экспозицию из отрасли или кредитного флага.",
+        }[data.role_id]
+        return {"company_id": data.company_id, "role_id": data.role_id, "role_task": role_task,
+                "decision_context": "Сформулируйте один компактный AI-сценарий: механизм, риск или возможность и следующая конкретная проверка. Сохраняйте причинность условной.", "event_id": data.event_id,
                 "company_features": list(data.company_features),
                 "evidence": [{"evidence_id": e.evidence_id, "source_id": e.source_id, "kind": e.kind,
                               "published_at": e.published_at, "text": e.text} for e in data.evidence],

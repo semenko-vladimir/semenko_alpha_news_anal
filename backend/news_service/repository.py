@@ -82,6 +82,103 @@ class NewsRepository:
                 inserted_at TEXT NOT NULL
             )""")
             db.execute("CREATE INDEX IF NOT EXISTS news_events_published ON news_events(published_at DESC, event_id)")
+            db.execute("""CREATE TABLE IF NOT EXISTS news_refresh_state (
+                singleton INTEGER PRIMARY KEY CHECK(singleton = 1),
+                last_attempt_at TEXT NOT NULL,
+                last_attempt_status TEXT NOT NULL,
+                last_attempt_error TEXT,
+                last_success_at TEXT
+            )""")
+
+    @staticmethod
+    def _parse_time(value: str | None) -> datetime | None:
+        if value is None:
+            return None
+        try:
+            parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+            if parsed.tzinfo is None or parsed.utcoffset() is None:
+                return None
+            return parsed.astimezone(timezone.utc)
+        except (ValueError, TypeError, OverflowError):
+            return None
+
+    def record_refresh(self, *, attempted_at: str, status: str, error: str | None,
+                       successful_at: str | None = None) -> None:
+        if status not in ("ok", "blocked", "error") or not self._parse_time(attempted_at):
+            raise NewsServiceError("invalid_refresh_state")
+        if successful_at is not None and not self._parse_time(successful_at):
+            raise NewsServiceError("invalid_refresh_state")
+        with self._connect() as db:
+            previous = db.execute("SELECT last_success_at FROM news_refresh_state WHERE singleton=1").fetchone()
+            last_success = successful_at or (previous[0] if previous else None)
+            db.execute("""INSERT INTO news_refresh_state
+                (singleton,last_attempt_at,last_attempt_status,last_attempt_error,last_success_at)
+                VALUES (1,?,?,?,?) ON CONFLICT(singleton) DO UPDATE SET
+                last_attempt_at=excluded.last_attempt_at,
+                last_attempt_status=excluded.last_attempt_status,
+                last_attempt_error=excluded.last_attempt_error,
+                last_success_at=excluded.last_success_at""",
+                (attempted_at, status, error, last_success))
+
+    @classmethod
+    def status_snapshot(cls, database_path: str | Path, *, now: datetime | None = None,
+                        stale_after_seconds: int = 86400) -> dict:
+        """Read safe counts/freshness only. Never creates a database or connects to a source."""
+        path = Path(database_path)
+        if not path.is_file():
+            raise NewsServiceError("database_missing")
+        if isinstance(stale_after_seconds, bool) or not isinstance(stale_after_seconds, int) or stale_after_seconds < 0:
+            raise NewsServiceError("invalid_stale_threshold")
+        current = now or datetime.now(timezone.utc)
+        if current.tzinfo is None or current.utcoffset() is None:
+            raise NewsServiceError("invalid_clock")
+        current = current.astimezone(timezone.utc)
+        # URI read-only mode also prevents accidental creation on races.
+        uri = path.resolve().as_uri() + "?mode=ro"
+        try:
+            db = sqlite3.connect(uri, uri=True, timeout=5)
+            db.row_factory = sqlite3.Row
+            try:
+                # Keep Python memory independent of the accumulated history size.
+                # The fixed batch also bounds the number of SQLite rows held at once.
+                dates = db.execute("SELECT published_at FROM news_events")
+                news_count = 0
+                publication_age = {"unknown": 0, "future": 0, "stale": 0, "within_threshold": 0}
+                while rows := dates.fetchmany(256):
+                    news_count += len(rows)
+                    for (raw_date,) in rows:
+                        publication = cls._parse_time(raw_date)
+                        if publication is None:
+                            publication_age["unknown"] += 1
+                        elif publication > current:
+                            publication_age["future"] += 1
+                        elif (current - publication).total_seconds() > stale_after_seconds:
+                            publication_age["stale"] += 1
+                        else:
+                            publication_age["within_threshold"] += 1
+                has_state = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='news_refresh_state'").fetchone()
+                state = db.execute("SELECT * FROM news_refresh_state WHERE singleton=1").fetchone() if has_state else None
+            finally:
+                db.close()
+        except sqlite3.Error:
+            raise NewsServiceError("database_unavailable") from None
+        attempt = dict(state) if state else None
+        freshness = "unknown"
+        if attempt and attempt["last_success_at"]:
+            fetched = cls._parse_time(attempt["last_success_at"])
+            if fetched is None:
+                freshness = "unknown"
+            elif fetched > current:
+                freshness = "future"
+            elif (current - fetched).total_seconds() > stale_after_seconds:
+                freshness = "stale"
+            else:
+                freshness = "fresh"
+        return {"news_count": news_count, "publication_age": publication_age,
+                "last_attempt": ({"at": attempt["last_attempt_at"], "status": attempt["last_attempt_status"],
+                                  "error": attempt["last_attempt_error"]} if attempt else None),
+                "last_success_at": attempt["last_success_at"] if attempt else None,
+                "fetch_freshness": freshness, "stale_after_seconds": stale_after_seconds}
 
     @contextmanager
     def _connect(self):
@@ -118,12 +215,19 @@ class NewsRepository:
                         raise NewsServiceError("field_limit_or_type")
                 if not item.source_id or not item.content_hash or not isinstance(item.synthetic, bool):
                     raise NewsServiceError("invalid_item")
-                if not re.fullmatch(r"cbr:[0-9a-f]{64}", item.source_id):
+                official = item.source_id.startswith('official:')
+                if not re.fullmatch(r"(?:cbr|official):[0-9a-f]{64}", item.source_id):
                     raise NewsServiceError("invalid_source_id")
-                expected_provenance = "synthetic_fixture" if item.synthetic else "live"
+                expected_provenance = 'official_publication' if official else "synthetic_fixture" if item.synthetic else "live"
                 if item.provenance != expected_provenance:
                     raise NewsServiceError("invalid_provenance")
-                if item.canonical_url is not None and not item.canonical_url.startswith("https://www.cbr.ru/") and not item.canonical_url.startswith("https://cbr.ru/"):
+                if official:
+                    from backend.sources.official_news import official_url
+                    try:
+                        valid=official_url(item.canonical_url)
+                        if item.synthetic or item.source_id!='official:'+sha256(valid.encode()).hexdigest():raise ValueError()
+                    except (ValueError,TypeError):raise NewsServiceError('invalid_source_url') from None
+                elif item.canonical_url is not None and not item.canonical_url.startswith("https://www.cbr.ru/") and not item.canonical_url.startswith("https://cbr.ru/"):
                     raise NewsServiceError("invalid_source_url")
                 if item.published_at is not None:
                     try:
@@ -197,10 +301,19 @@ class NewsService:
     def __init__(self, repository: NewsRepository):
         self.repository = repository
 
-    def fetch_and_ingest(self) -> dict:
+    def fetch_and_ingest(self, *, clock=_utc_now) -> dict:
         batch = self.repository.adapter.fetch()
+        attempted_at = clock()
         if batch.status != "ok":
+            self.repository.record_refresh(attempted_at=attempted_at, status="blocked", error=batch.error)
             return {"status": "blocked", "error": batch.error, "retrieved_at": batch.fetched_at,
                     "received": 0, "inserted": 0}
-        result = self.repository.ingest(batch.items, retrieved_at=batch.fetched_at)
+        try:
+            result = self.repository.ingest(batch.items, retrieved_at=batch.fetched_at)
+        except NewsServiceError as exc:
+            self.repository.record_refresh(attempted_at=attempted_at, status="error", error=str(exc))
+            return {"status": "error", "error": str(exc), "retrieved_at": batch.fetched_at,
+                    "received": len(batch.items), "inserted": 0}
+        self.repository.record_refresh(attempted_at=attempted_at, status="ok", error=None,
+                                       successful_at=batch.fetched_at)
         return {"status": "ok", "error": None, **result}

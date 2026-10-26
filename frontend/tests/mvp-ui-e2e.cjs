@@ -94,7 +94,7 @@ async function positive(base, viewport, companyIndex) {
       await textVisible(page, 'Что пока неизвестно');
       await textVisible(page, 'Место в источнике:');
       await textVisible(page, 'Дата документа:');
-      const bankLabels = { historical: 'Историческая позиция', found: 'Найдена в датированном документе', not_found: 'Покрытие не найдено', not_checked: 'Не проверялась' };
+      const bankLabels = { historical: 'Историческая позиция', found: 'Найдена в датированном документе', not_found: 'Подходящий документ не найден', not_checked: 'Не проверялась' };
       await textVisible(page, bankLabels[card.bank_position_status]);
       await page.locator('#exposure-answer').fill('Связь пока не подтверждена пользователем');
       const answerResponse = page.waitForResponse(r => r.url().endsWith('/questions') && r.request().method() === 'POST');

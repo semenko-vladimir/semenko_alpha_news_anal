@@ -12,6 +12,7 @@ export type RunApi = {
 export type RunOutcome = { status: 'succeeded' | 'failed' | 'unknown'; execution_mode?: AnalysisRun['execution_mode'] };
 
 export function runSuccessMessage(mode: AnalysisRun['execution_mode']): string {
+  if (mode === 'local_ollama') return 'Анализ локальной LLM сервера · экспериментальный режим.';
   return mode === 'agentic_fixture' ? 'Анализ на тестовой модели.' : mode === 'mvp_offline' ? 'Локальный анализ · тестовая модель, без живой LLM.' : mode === 'broker_live' ? 'Анализ с разрешённой живой моделью.' : 'Демонстрационный анализ · синтетические данные.';
 }
 

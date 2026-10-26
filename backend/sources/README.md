@@ -1,4 +1,4 @@
-# RSS adapter ЦБ
+# RSS-адаптер ЦБ
 
 `cbr_rss.SourceAdapter.fetch(since, cursor)` читает фиксированный RSS URL ЦБ и возвращает `SourceBatch.status/error`. Неподдерживаемый cursor даёт ошибку. `parse(bytes)` работает без сети; тесты передают fixtures. Adapter использует стандартную библиотеку Python. API приложения читает подготовленную БД и не вызывает fetch.
 
@@ -8,6 +8,6 @@ Fetch ограничивает timeout 12 секундами и чтение 1 M
 
 ## Нормализация
 
-`ingestion.source_bridge.normalize()` преобразует `SourceItem` в `EventSourceRecord` и optional `Evidence` без сети и изменения публичного DTO. Он сохраняет происхождение, даты, upstream hash и synthetic flag. SHA-256 текста охватывает title/body; `event_date=None`. Missing-поля перечисляются в `unknown_fields`. Adapter не устанавливает связь компании с событием, подтверждённую экспозицию или позицию банка.
+`ingestion.source_bridge.normalize()` преобразует `SourceItem` в `EventSourceRecord` и необязательный `Evidence` без сети и изменения публичного DTO. Он сохраняет происхождение, даты, хеш исходного материала и признак synthetic. SHA-256 текста охватывает title/body; `event_date=None`. Отсутствующие поля перечисляются в `unknown_fields`. Adapter не устанавливает связь компании с событием, подтверждённую экспозицию или позицию банка.
 
 Точные дубли исчезают, конфликтующие payload под одним source ID получают устойчивые event IDs. Неверные значения, даты и превышение лимитов дают структурную ошибку; текст не обрезается. Инструкции внутри источника остаются данными. `validated` означает проверку структуры и происхождения, а не истинность вывода.

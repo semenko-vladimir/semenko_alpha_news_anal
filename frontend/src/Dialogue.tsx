@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api, type Insight } from './api';
 import { Sources } from './Sources';
 import { executeDialogue, subscribeDialogue, type DialogueEntry } from './dialogueLifecycle';
+import { UiIcon } from './UiIcon';
 
-export function Dialogue({ insight, entry }: { insight: Insight; entry: DialogueEntry }) {
+const suggestions = ['Как это может повлиять на наши расходы?', 'Какие риски стоит проверить в первую очередь?', 'На каких данных основан этот вывод?'];
+
+export function Dialogue({ insight, entry, blocked = false }: { insight: Insight; entry: DialogueEntry; blocked?: boolean }) {
   const [, redraw] = useState(0);
+  const messageInput = useRef<HTMLTextAreaElement>(null);
   const update = () => redraw(n => n + 1);
   useEffect(() => {
     const unsubscribe = subscribeDialogue(entry, () => redraw(n => n + 1));
@@ -14,9 +18,10 @@ export function Dialogue({ insight, entry }: { insight: Insight; entry: Dialogue
   const question = entry.result?.status === 'succeeded' ? entry.result.question : insight.question;
   const send = (operation: 'answer' | 'message') => void executeDialogue(entry, operation, question?.question_id,
     (text, key) => operation === 'answer' ? api.answer(insight.insight_id, question!.question_id, text, key) : api.message(insight.insight_id, text, key));
-  const locked = entry.state !== 'idle';
+  const locked = entry.state !== 'idle' || blocked;
   return <section className="dialogue" aria-label="Обсуждение инсайта">
-    <h3>Уточнить и обсудить</h3><p>Сообщения относятся к выбранной компании, роли и этому инсайту. Ответ пользователя не заменяет исходные данные.</p>
+    <div className="assistant-heading"><span className="assistant-icon"><UiIcon name="chat" /></span><div><p className="eyebrow">УТОЧНИТЬ И ОБСУДИТЬ</p><h3>AI-ассистент</h3></div></div><p>Сообщения относятся к выбранной компании, роли и этому инсайту. Ответ пользователя не заменяет исходные данные.</p>
+    <p className="suggestions-label">Примеры вопросов</p><div className="question-suggestions" role="group" aria-label="Примеры вопросов ассистенту">{suggestions.map(text => <button type="button" key={text} disabled={locked} onClick={() => { entry.message = text; update(); messageInput.current?.focus(); }}>{text}</button>)}</div>
     {question && !entry.answered.has(question.question_id) && <form onSubmit={e => { e.preventDefault(); send('answer'); }}>
       <label htmlFor="exposure-answer">{question.text}</label>
       {question.options && <div className="answer-options">{question.options.map(option => <button type="button" key={option} disabled={locked} onClick={() => { entry.answer = option; update(); }}>{option}</button>)}</div>}
@@ -24,7 +29,7 @@ export function Dialogue({ insight, entry }: { insight: Insight; entry: Dialogue
       <button className="primary" disabled={locked || !entry.answer.trim()}>Сохранить уточнение</button>
     </form>}
     <form onSubmit={e => { e.preventDefault(); send('message'); }}>
-      <label htmlFor="insight-message">Вопрос по инсайту</label><textarea id="insight-message" maxLength={2000} value={entry.message} disabled={locked} onChange={e => { entry.message = e.target.value; update(); }} />
+      <label htmlFor="insight-message">Вопрос по инсайту</label><textarea ref={messageInput} id="insight-message" placeholder="Введите вопрос по этому инсайту" maxLength={2000} value={entry.message} disabled={locked} onChange={e => { entry.message = e.target.value; update(); }} />
       <button className="primary" disabled={locked || !entry.message.trim()}>Отправить вопрос</button>
     </form>
     {entry.notice && <p className="notice" role="status">{entry.notice}</p>}

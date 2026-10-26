@@ -1,0 +1,51 @@
+services:
+  api:
+    build:
+      context: .
+      target: product-api
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m
+    group_add:
+      - ${PRODUCT_DATA_GID:-10001}
+    environment:
+      ALPHA_PRODUCT_RUNTIME: /var/lib/alpha-product
+      ALPHA_PUBLIC_CATALOG_PATH: /app/data/catalog/companies.json
+      ALPHA_NEWS_REGISTRY: /app/data/catalog/news_sources.json
+      ALPHA_PRODUCT_LIVE: "0"
+      ALPHA_PRODUCT_AUTO_REFRESH: "1"
+    volumes:
+      - ${PRODUCT_RUNTIME_DIR:-product_runtime}:/var/lib/alpha-product
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health',timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    stop_grace_period: 60s
+    restart: unless-stopped
+  web:
+    build:
+      context: .
+      target: web
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - 127.0.0.1:${PRODUCT_WEB_PORT:-8089}:8080
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+      - /var/cache/nginx:rw,noexec,nosuid,size=16m
+      - /var/run:rw,noexec,nosuid,size=1m
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+volumes:
+  product_runtime:

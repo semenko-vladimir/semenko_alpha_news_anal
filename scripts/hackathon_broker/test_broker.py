@@ -236,6 +236,18 @@ class BrokerTests(unittest.TestCase):
             self.assertEqual(self.run_with(op, job=job)["status"], "error")
         self.assertEqual(op.calls, 0)
 
+    def test_prompt_and_response_transport_bounds(self):
+        op = FakeOpener()
+        too_long = dict(self.job, prompt="x" * (broker.MAX_PROMPT + 1))
+        rejected = self.run_with(op, job=too_long)
+        self.assertEqual(rejected["error"], "prompt_too_long")
+        self.assertEqual(op.calls, 0)
+
+        oversized = FakeOpener(b"{" + b" " * broker.MAX_RESPONSE)
+        rejected = self.run_with(oversized, job=dict(self.job, task_id="oversized-response"))
+        self.assertEqual(rejected["error"], "response_too_large")
+        self.assertEqual(oversized.calls, 1)
+        self.assertEqual(len(oversized.response), broker.MAX_RESPONSE + 1)
     def test_malformed_and_http_errors_do_not_retry_or_leak(self):
         cases = [(FakeOpener(b"not json"), "malformed_upstream_response"),
                  (FakeOpener(error=urllib.error.HTTPError("x", 401, "canary-secret", {}, io.BytesIO(b"canary-secret"))), "upstream_unauthorized"),
@@ -324,7 +336,7 @@ class BrokerTests(unittest.TestCase):
         self.assertEqual(result["status"], "ok")
         payload = json.loads(upstream.request.data)
         self.assertEqual(payload.get("reasoning_effort"), "none")
-        self.assertEqual(payload["max_tokens"], 384)
+        self.assertEqual(payload["max_tokens"], 512)
         self.assertEqual(broker.MAX_DAILY, 4)
         other = FakeOpener(json.dumps({"choices": [{"message": {"content": "{}"}}]}).encode())
         self.run_with(other, job=dict(self.job, task_id="other-model"))
@@ -355,7 +367,7 @@ class BrokerTests(unittest.TestCase):
         self.assertEqual(result['status'], 'ok')
         self.assertEqual(result['used_attempts'], 1)
         self.assertEqual(result['remaining_attempts'], 3)
-        self.assertEqual(result['max_output_tokens'], 384)
+        self.assertEqual(result['max_output_tokens'], 512)
         self.assertEqual(self.db.read_bytes(), before)
         self.assertNotIn('canary-secret', output.getvalue())
 

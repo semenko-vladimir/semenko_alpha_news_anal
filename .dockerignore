@@ -52,3 +52,11 @@ frontend/tsconfig.tsbuildinfo
 /**/.*
 /*.md
 /*.txt
+
+# Explicit public catalog only; client/bank data stays excluded.
+!/data/
+/data/*
+!/data/catalog/
+/data/catalog/*
+!/data/catalog/companies.json
+!/data/catalog/news_sources.json

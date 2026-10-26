@@ -1,0 +1,6 @@
+services:
+  api:
+    environment:
+      ALPHA_MVP_BANK_PATH: /inputs/bank.sqlite3
+    volumes:
+      - ${PRODUCT_BANK_INDEX_FILE:?Set private local bank index path}:/inputs/bank.sqlite3:ro

@@ -1,0 +1,6 @@
+services:
+  api:
+    environment:
+      ALPHA_MVP_COMPANIES_PATH: /inputs/case.csv
+    volumes:
+      - ${PRODUCT_CASE_FILE:?Set private four-company snapshot path}:/inputs/case.csv:ro

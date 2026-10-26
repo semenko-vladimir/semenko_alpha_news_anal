@@ -1,0 +1,21 @@
+services:
+  edge:
+    image: nginxinc/nginx-unprivileged:1.28-alpine
+    depends_on:
+      web:
+        condition: service_started
+    ports:
+      - 127.0.0.1:${PRODUCT_HTTPS_PORT:-8443}:8443
+    read_only: true
+    group_add:
+      - ${PRODUCT_DATA_GID:-10001}
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+      - /var/cache/nginx:rw,noexec,nosuid,size=16m
+      - /var/run:rw,noexec,nosuid,size=1m
+    volumes:
+      - ./deploy/nginx/product-https.conf:/etc/nginx/conf.d/default.conf:ro
+      - ${PRODUCT_TLS_CERT:?Set certificate file}:/etc/alpha/cert.pem:ro
+      - ${PRODUCT_TLS_KEY:?Set TLS key file}:/etc/alpha/key.pem:ro
+      - ${PRODUCT_AUTH_FILE:?Set password hash file}:/etc/alpha/htpasswd:ro
+    restart: unless-stopped

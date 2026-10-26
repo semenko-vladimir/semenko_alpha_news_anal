@@ -23,6 +23,10 @@ _MODAL = re.compile(r'(?<!не )(?<!not )\b(?:может|могут|возмож
 _ABSOLUTE = re.compile(r'\b(?:гарантирован\w*|неизбеж\w*|точно|definitely|guaranteed|certainly)\b')
 _GUARANTEE = re.compile(r'(?<!не )(?<!not )\b(?:гарантирован\w*|неизбеж\w*|guaranteed|inevitable)\b')
 _PRESENT_IMPACT = re.compile(r'\b(?:испытыва\w*|имеет|has|faces)\b.{0,100}\b(?:дефицит\w*|убыт\w*|shortage\w*|loss\w*|cash\s+gap)\b')
+_PROBABILITY_CHANGE = re.compile(r'\b(?:повыша\w*|повысит|увеличива\w*|снижа\w*|уменьша\w*)\s+(?:вероятност\w*|шанс\w*)\b')
+_SOURCE_REFUTATION = re.compile(
+    r'\s*гарантированн(?:ый|ая|ое)\s+(?:убыток|ущерб|эффект)\s+в\s+непроверенном\s+тексте\s+'
+    r'является\s+(?:несостоятельным|необоснованным)\s+(?:требованием|утверждением)\s*')
 
 
 def unsupported_categorical_impact(text):
@@ -31,8 +35,12 @@ def unsupported_categorical_impact(text):
     # clause: "Возможно, ..." and "компания, вероятно, ..." remain uncertain.
     text = re.sub(r'\b(возможно|вероятно)\s*,', r'\1 ', text)
     for clause in _CLAUSES.split(text):
+        # A scoped statement that rejects an instruction in untrusted source
+        # text is not a guarantee of the company's loss. Other clauses still run.
+        if _SOURCE_REFUTATION.fullmatch(clause):
+            continue
         if _GUARANTEE.search(clause):
             return True
-        if (_OUTCOME.search(clause) or _PRESENT_IMPACT.search(clause)) and (_ABSOLUTE.search(clause) or not _MODAL.search(clause)):
+        if (_OUTCOME.search(clause) or _PRESENT_IMPACT.search(clause) or _PROBABILITY_CHANGE.search(clause)) and (_ABSOLUTE.search(clause) or not _MODAL.search(clause)):
             return True
     return False

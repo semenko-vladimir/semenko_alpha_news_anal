@@ -14,6 +14,9 @@ from starlette.exceptions import HTTPException
 from backend.dialogue import DialogueContext, DialogueError, DialogueService, DialogueSource, SQLiteDialogueStore
 from backend.model_clients import UnknownOutcome, TaskIdConflict, InvalidRequest
 from .engine import MVPEngine, digest
+from backend.profiles.catalog import profile_metadata
+from backend.analysis.claim_policy import unsupported_categorical_impact
+from .operation_jobs import OperationJobs
 
 API = "/api/v1"
 
@@ -98,10 +101,18 @@ def make_mvp_app(db, mode, config):
                 task_id TEXT PRIMARY KEY, fingerprint TEXT NOT NULL, status TEXT NOT NULL, output_json TEXT);
         """)
     engine = MVPEngine(config, mode)
-    if mode == "broker_live" and not engine.blocker:
-        engine.model = DurableModel(db, engine.model, config.task_id)
+    operations = None
+    if mode in {"broker_live","local_ollama"} and not engine.blocker:
+        if mode=='local_ollama':
+            operations=OperationJobs(db,engine.model,config.task_id,client_factory=lambda task_id:engine.model,
+                status_policy={'daily_attempt_limit':None,'remaining_attempts':None,'reset_time_msk':None,'provider':'ollama_local'})
+        elif config.operation_jobs:
+            operations = OperationJobs(db, engine.model, config.task_id)
+        else:
+            engine.model = DurableModel(db, engine.model, config.task_id)
     store = SQLiteDialogueStore(db.path)
-    dialogue = DialogueService(engine.model, None, store, timeout_seconds=90 if mode == "broker_live" else 10)
+    dialogue_timeout=90 if mode in {'local_ollama','broker_live'} else 10
+    dialogue = DialogueService(engine.model, None, store, timeout_seconds=dialogue_timeout)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -110,6 +121,12 @@ def make_mvp_app(db, mode, config):
 
     app = FastAPI(title="Local business insights MVP", lifespan=lifespan)
     app.state.db, app.state.mvp_engine, app.state.dialogue_store = db, engine, store
+    app.state.operation_jobs = operations
+
+    def dialogue_for(row, operation, key):
+        if not operations:return dialogue
+        stable=digest([row['company'],row['role'],row['id'],operation,key])
+        return DialogueService(operations.for_operation('dialogue:'+stable),None,store,timeout_seconds=dialogue_timeout)
 
     def error(status, code):
         return JSONResponse(status_code=status, content={"error": {"code": code,
@@ -176,7 +193,7 @@ def make_mvp_app(db, mode, config):
                 or any(s.company_id != row["company"] for s in current.sources)):
             raise SafeError(403, "access_denied")
 
-    def get_card(insight_id):
+    def get_card(insight_id, register_context=True):
         access()
         with db.connection() as conn:
             row = conn.execute("SELECT * FROM mvp_cards WHERE id=?", (insight_id,)).fetchone()
@@ -197,22 +214,47 @@ def make_mvp_app(db, mode, config):
         source_ids = {s["source_id"] for s in card["sources"]}
         if any(not set(b.get("evidence_refs", [])) <= source_ids for b in card["blocks"]):
             raise SafeError(403, "source_scope_invalid")
-        register(row, card)
+        if mode=='local_ollama' and any(b.get('kind')=='ai_inference' and unsupported_categorical_impact(b.get('text','')) for b in card['blocks']):
+            raise SafeError(409,'local_output_requires_review')
+        if register_context:
+            register(row, card)
         return row, card
 
     def summary(card):
-        return {k: card[k] for k in ("insight_id", "company_id", "role_id", "event_id", "headline", "summary", "created_at", "bank_position_status", "synthetic", "exposure_status")}
+        return {**{k: card[k] for k in ("insight_id", "company_id", "role_id", "event_id", "headline", "summary", "created_at", "bank_position_status", "synthetic", "exposure_status")},
+                'event_published_at':card.get('event_published_at')}
 
     @app.get(API + "/health")
     def health():
         return {"status": "ok", "mode": mode, "access_mode": "configured_local_demo" if config.local_access else "disabled",
-                "model": "fake" if mode == "mvp_offline" else "broker", "blocker": engine.blocker}
+                "model": "fake" if mode == "mvp_offline" else "ollama" if mode=='local_ollama' else "broker", "blocker": engine.blocker,
+                "live_operations":operations.status() if operations else None}
 
     @app.get(API + "/companies")
     def companies():
         require_ready()
-        return {"items": [{"company_id": p.company_id, "display_name": p.display_name, "category": p.category,
-                           "profile_version": p.version} for p in sorted(engine.profiles.values(), key=lambda x: x.company_id)]}
+        return {"items": [profile_metadata(p) for p in sorted(engine.profiles.values(), key=lambda x: (x.features.get('profile_origin')!='public',x.display_name))]}
+
+    @app.get(API + "/companies/{company}/profile")
+    def company_profile(company: str):
+        require_ready();access(company)
+        profile=engine.profiles[company]
+        sources=[{'kind':'company_profile','title':'Предоставленный профиль компании','uri':None,'trust_status':'provided',
+                  **{k:v for k,v in source.items() if k not in {'text','fingerprint'}}} for source in profile.source_refs]
+        return {**profile_metadata(profile), 'legal_name':profile.features.get('legal_name'),
+            'entity_scope':profile.features.get('entity_scope'),
+            'activity':profile.features.get('activity_description') or profile.features.get('main_okved_name'),
+            'metrics':profile.features.get('metrics',[]),'unknowns':profile.unknowns,'sources':sources}
+
+    @app.get(API + '/data-status')
+    def data_status():
+        require_ready()
+        from backend.news_service.product_refresh import product_data_status
+        local_model=({'provider':'ollama','name':engine.model.model,'display_name':'Qwen 3.5 4B' if '4B-' in engine.model.model else 'Qwen 3.5 9B',
+            'prompt_version':engine.model.prompt_version,'hackathon_allowlisted':False,'last_usage':engine.model.last_usage} if mode=='local_ollama' else None)
+        return {**product_data_status(engine.news.database_path),'public_profile_count':sum(p.features.get('profile_origin')=='public' for p in engine.profiles.values()),
+                'provided_profile_count':sum(p.features.get('profile_origin')!='public' for p in engine.profiles.values()),
+                'execution_mode':mode,'live_operations':operations.status() if operations else None,'local_model':local_model}
 
     @app.post(API + "/companies/{company}/analysis-runs", status_code=202)
     def create_run(company: str, body: RunBody):
@@ -234,6 +276,9 @@ def make_mvp_app(db, mode, config):
                 conn.execute("INSERT OR IGNORE INTO mvp_keys VALUES(?,?,?,?,?)", (company, body.role_id, body.idempotency_key, fingerprint, old["id"]))
                 conn.commit()
                 return json.loads(old["dto"])
+            if operations and operations.status()['blocked']:
+                reason=operations.status()['stop_code']
+                raise SafeError(429 if reason=='budget_exceeded' else 503,reason or 'live_unavailable')
             run_id, snap_id, timestamp = ident("run-"), ident("snap-"), now()
             dto = {"run_id": run_id, "company_id": company, "role_id": body.role_id,
                    "input_version": fingerprint, "input_snapshot_id": snap_id, "status": "unknown_outcome",
@@ -244,7 +289,10 @@ def make_mvp_app(db, mode, config):
             conn.execute("INSERT INTO mvp_keys VALUES(?,?,?,?,?)", (company, body.role_id, body.idempotency_key, fingerprint, run_id))
             conn.commit()
         try:
-            status, cards, trace, code = engine.run(company, body.role_id, bundles)
+            status, cards, trace, code = (engine.run(company, body.role_id, bundles,model=operations.for_operation(run_id))
+                                         if operations else engine.run(company, body.role_id, bundles))
+            if operations and status != 'succeeded' and operations.status()['stop_code'] in {None,'unresolved_operation'}:
+                operations.stop('budget_exceeded' if code=='budget_exceeded' else 'unknown_outcome' if status=='unknown_outcome' else 'output_invalid' if code=='output_invalid' else 'operation_failed')
             with db.connection() as conn:
                 conn.execute("BEGIN IMMEDIATE")
                 for card in cards:
@@ -270,6 +318,9 @@ def make_mvp_app(db, mode, config):
 
     @app.get(API + "/analysis-runs/{run_id}")
     def read_run(run_id: str):
+        return validate_read_run(run_id, register_context=True)
+
+    def validate_read_run(run_id: str, register_context=True):
         access()
         with db.connection() as conn:
             row = conn.execute("SELECT * FROM mvp_runs WHERE id=?", (run_id,)).fetchone()
@@ -280,12 +331,92 @@ def make_mvp_app(db, mode, config):
         if dto["company_id"] != row["company"] or dto["role_id"] != row["role"]:
             raise SafeError(403, "access_denied")
         for iid in dto["result_ids"]:
-            nested, card = get_card(iid)
+            nested, card = get_card(iid, register_context=register_context)
             if nested["company"] != row["company"] or nested["role"] != row["role"]:
                 raise SafeError(403, "access_denied")
             if nested["snapshot_id"] != dto["input_snapshot_id"]:
                 raise SafeError(403, "access_denied")
         return dto
+
+    @app.get(API + "/analysis-runs/{run_id}/trace")
+    def read_run_trace(run_id: str):
+        # Reuse the run's complete access and nested card/snapshot checks.
+        dto = validate_read_run(run_id, register_context=False)
+        with db.connection() as conn:
+            row = conn.execute("SELECT * FROM mvp_runs WHERE id=?", (run_id,)).fetchone()
+            snap = conn.execute("SELECT * FROM mvp_snapshots WHERE id=?", (dto["input_snapshot_id"],)).fetchone()
+        if not row or not snap or snap["company"] != row["company"] or snap["role"] != row["role"]:
+            raise SafeError(403, "access_denied")
+        snapshot = json.loads(snap["payload"])
+        if digest(snapshot) != snap["fingerprint"] or snap["fingerprint"] != row["fingerprint"]:
+            raise SafeError(403, "source_scope_invalid")
+        trace_json = row["trace_json"]
+        if not isinstance(trace_json, str) or len(trace_json) > 65536 or len(trace_json.encode("utf-8", errors="replace")) > 65536:
+            raise SafeError(403, "source_scope_invalid")
+        try:
+            raw_trace = json.loads(trace_json)
+        except (TypeError, json.JSONDecodeError):
+            raise SafeError(403, "source_scope_invalid") from None
+        if not isinstance(raw_trace, list):
+            raise SafeError(403, "source_scope_invalid")
+        raw_trace = raw_trace[:64]
+        stage_names = {"context", "plan", "tool", "relevance", "model", "validate", "adapt"}
+        feature_keys = {"company_category", "role", "eligibility_status", "main_okved_name"}
+        source_kinds = {"news", "bank_document", "company_profile", "user_input", "company", "payment", "link"}
+        statuses = {"completed", "submitted", "started", "passed", "rejected", "stopped",
+                    "one_correction_available", "unknown_outcome", "timeout", "budget_exceeded",
+                    "authentication_failure", "model_failure"}
+        reasons = {"topic_only_exposure_unknown", "no_retry", "no_correction_assignment", "output_invalid",
+                   "timeout", "unknown_outcome", "budget_exceeded", "authentication_failure", "model_failure",
+                   "output_not_object", "schema_fields_invalid", "kind_invalid", "claim_invalid",
+                   "claim_size_limit", "evidence_refs_invalid", "evidence_refs_limit", "fact_evidence_required",
+                   "evidence_reference_unresolved", "exposure_status_invalid", "exposure_not_supported",
+                   "bank_attribution_unverified", "unexpected_bank_attribution", "unsupported_categorical_impact",
+                   "output_size_limit"}
+        safe_trace = []
+        for item in raw_trace:
+            if not isinstance(item, dict):
+                continue
+            stage, status = item.get("stage"), item.get("status")
+            if not isinstance(stage, str) or stage not in stage_names or not isinstance(status, str) or status not in statuses:
+                continue
+            entry = {"stage": stage, "status": status}
+            if stage == "context" and isinstance(item.get("feature_keys"), list):
+                entry["features"] = [key for key in item["feature_keys"][:16] if isinstance(key, str) and key in feature_keys]
+            if stage == "model" and isinstance(item.get("attempt"), int) and item["attempt"] in {1, 2}:
+                entry["attempt"] = item["attempt"]
+            reason = item.get("reason")
+            if isinstance(reason, str) and reason in reasons:
+                entry["reason"] = reason
+            reason_list = item.get("reasons")
+            if isinstance(reason_list, list):
+                entry["reasons"] = [value for value in reason_list[:8] if isinstance(value, str) and value in reasons][:4]
+            refs = item.get("source_ids")
+            if stage == "tool" and isinstance(refs, list):
+                refs = [value for value in refs[:32] if isinstance(value, str) and len(value) <= 256]
+                pinned = snapshot.get("source_fingerprints", {})
+                # Source metadata comes from the pinned snapshot payload, never from trace text.
+                source_rows = {}
+                # Older snapshots store fingerprints only; resolve safe refs from the pinned cards.
+                for iid in dto["result_ids"]:
+                    with db.connection() as card_conn:
+                        card_row = card_conn.execute("SELECT payload FROM mvp_cards WHERE id=?", (iid,)).fetchone()
+                    if card_row:
+                        for source in json.loads(card_row["payload"]).get("sources", []):
+                            if isinstance(source, dict) and source.get("source_id") in refs:
+                                source_rows[source["source_id"]] = source
+                entry["sources"] = [{"source_id": sid, "kind": source_rows[sid].get("kind") if source_rows[sid].get("kind") in source_kinds else "unknown",
+                                      "date": (source_rows[sid].get("document_date") or source_rows[sid].get("published_at"))[:32]
+                                      if isinstance(source_rows[sid].get("document_date") or source_rows[sid].get("published_at"), str) else None}
+                    for sid in refs if sid in source_rows and sid in pinned]
+            safe_trace.append(entry)
+        feature_labels = {"company_category": "категория компании", "role": "роль руководителя",
+                          "eligibility_status": "статус допуска", "main_okved_name": "основной вид деятельности"}
+        features = list(dict.fromkeys(feature_labels[key] for item in safe_trace
+                                      for key in item.get("features", []) if key in feature_labels))
+        return {"run_id": run_id, "company_id": row["company"], "role_id": row["role"],
+                "status": dto["status"], "execution_mode": dto["execution_mode"],
+                "trace": safe_trace, "features": features}
 
     @app.get(API + "/companies/{company}/feed")
     def feed(company: str, role_id: str = Query(...), after: str | None = None):
@@ -299,7 +430,12 @@ def make_mvp_app(db, mode, config):
                 AND json_extract(dto,'$.execution_mode')=? ORDER BY rowid DESC LIMIT 1""",
                 (company, role_id, mode)).fetchone()
         ids = json.loads(latest['dto'])['result_ids'] if latest else []
-        return {"items": [summary(get_card(iid)[1]) for iid in ids], "next_cursor": None}
+        items=[]
+        for iid in ids:
+            try:items.append(summary(get_card(iid)[1]))
+            except SafeError as exc:
+                if mode!='local_ollama' or exc.code!='local_output_requires_review':raise
+        return {"items":items,"next_cursor":None}
 
     @app.get(API + "/insights/{insight_id}")
     def read_insight(insight_id: str):
@@ -312,16 +448,18 @@ def make_mvp_app(db, mode, config):
     def questions(insight_id: str, body: AnswerBody):
         require_ready()
         row, card = get_card(insight_id)
-        result = dialogue.answer_question(company_id=row["company"], role_id=row["role"], insight_id=insight_id,
+        result = dialogue_for(row,'answer',body.idempotency_key).answer_question(company_id=row["company"], role_id=row["role"], insight_id=insight_id,
                     question_id=body.question_id, answer=body.answer, idempotency_key=body.idempotency_key)
+        if operations and result.status!='succeeded' and operations.status()['stop_code'] in {None,'unresolved_operation'}:operations.stop('unknown_outcome' if result.status=='unknown_outcome' else 'output_invalid')
         return asdict(result)
 
     @app.post(API + "/insights/{insight_id}/messages")
     def messages(insight_id: str, body: MessageBody):
         require_ready()
         row, card = get_card(insight_id)
-        result = dialogue.ask_message(company_id=row["company"], role_id=row["role"], insight_id=insight_id,
+        result = dialogue_for(row,'message',body.idempotency_key).ask_message(company_id=row["company"], role_id=row["role"], insight_id=insight_id,
                                      text=body.text, idempotency_key=body.idempotency_key)
+        if operations and result.status!='succeeded' and operations.status()['stop_code'] in {None,'unresolved_operation'}:operations.stop('unknown_outcome' if result.status=='unknown_outcome' else 'output_invalid')
         return asdict(result)
 
     return app
