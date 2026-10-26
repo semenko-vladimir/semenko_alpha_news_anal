@@ -46,3 +46,7 @@ The broker client allowlists these six model IDs: `google/gemma-4-26b-a4b-it`, `
 - **Modeled bank IAM, Internet bank, and banking integrations:** these describe target/product context only. The repository has no verified bank identity provider, production Internet Bank entry point, or live banking-system integration. Local access gates in this prototype do not represent bank authorization.
 
 No additional license or content-rights conclusion is made by these descriptions. Verify the applicable upstream terms and permissions before deployment or redistribution.
+
+## Presentation tooling
+
+The presentation PDF was rendered with SeaSlides, using the Editorial Grid theme, Typst Python binding 0.15.0 and Touying 0.7.4. The exported PDF uses embedded fonts and screenshots of this prototype. Theme source files, compiler packages and system font files are not redistributed in this public source bundle; they are local document-generation tools, not product runtime dependencies.
